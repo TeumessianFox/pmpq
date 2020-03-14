@@ -11,8 +11,8 @@ Based on https://github.com/libopencm3/libopencm3-template.git
  3. ```git apt install arm-none-eabi-gcc```
 
 ### Libopencm3:
- 4. ```git submodule update --init #```
- 5. ```make -C libopencm3 #```
+ 4. ```git submodule update --init```
+ 5. ```make -C libopencm3```
 
 ### stlink:
  6. Install [st-link](https://github.com/texane/stlink.git)
