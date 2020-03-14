@@ -1,7 +1,7 @@
 # Polynomial multiplication for post-quantum algorithms
 Based on https://github.com/libopencm3/libopencm3-template.git
 
-# Install
+## Install
 ```
  1. git clone https://github.com/TeumessianFox/pmpq.git
  2. cd pmpq
@@ -19,15 +19,15 @@ Based on https://github.com/libopencm3/libopencm3-template.git
 ### stlink:
  6. Install [st-link](https://github.com/texane/stlink.git)
 
-### Run:
+## Run:
 ```
- 6. cd polymul
- 7. make
+cd polymul
+make
 ```
 
-### Flash:
+## Flash:
 ```
- 8. make flash
+make flash
 ```
 
 ## Coding style
