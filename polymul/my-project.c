@@ -1,9 +1,9 @@
-#include "api.h"
-#include "api-asm.h"
+#include "hal-stm32f4.h"
 
 int main(void) {
-	/* add your own code */
-	uint32_t rev = 0xaabbccdd;
-	rev = rev_bytes(rev);
-	return my_func(rev);
+  hal_setup(CLOCK_BENCHMARK);
+  while(1){
+    hal_send_str("?\r\n");
+  }
+	return 0;
 }
