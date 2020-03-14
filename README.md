@@ -6,25 +6,28 @@ Based on https://github.com/libopencm3/libopencm3-template.git
  1. git clone https://github.com/TeumessianFox/pmpq.git
  2. cd pmpq
 ```
-OpenOCD:
-```
- 3. git apt install openocd
-```
-Libopencm3:
+### arm-none-eabi toolchain:
+ On Linux systems:
+ ```
+ 3. git apt install arm-none-eabi-gcc
+ ```
+### Libopencm3:
 ```
  4. git submodule update --init # (Only needed once)
  5. make -C libopencm3 # (Only needed once)
 ```
+### stlink:
+ 6. Install [st-link](https://github.com/texane/stlink.git)
 
-Run:
+### Run:
 ```
- 5. cd polymul
- 6. make
+ 6. cd polymul
+ 7. make
 ```
 
-Flash:
+### Flash:
 ```
- 7. make flash
+ 8. make flash
 ```
 
 ## Coding style
