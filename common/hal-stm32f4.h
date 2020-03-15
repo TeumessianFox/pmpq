@@ -10,6 +10,7 @@ enum clock_mode {
 
 void hal_setup(const enum clock_mode clock);
 void hal_send_str(const char* in);
+uint16_t hal_recv(void);
 uint64_t hal_get_time(void);
 
 #endif

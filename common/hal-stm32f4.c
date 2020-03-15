@@ -94,6 +94,11 @@ void hal_send_str(const char* in)
   send_USART_str(in);
 }
 
+uint16_t hal_recv()
+{
+  return usart_recv_blocking(USART2);
+}
+
 static volatile unsigned long long overflowcnt = 0;
 void sys_tick_handler(void)
 {
