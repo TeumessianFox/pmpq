@@ -73,13 +73,13 @@ static void systick_setup(void)
   systick_counter_enable();
 }
 
-static void send_USART_str(const char* in)
+static int send_USART_str(const char* in)
 {
   int i;
   for(i = 0; in[i] != 0; i++) {
     usart_send_blocking(USART2, *(unsigned char *)(in+i));
   }
-  usart_send_blocking(USART2, '\n');
+  return i;
 }
 void hal_setup(const enum clock_mode clock)
 {
@@ -89,9 +89,15 @@ void hal_setup(const enum clock_mode clock)
   systick_setup();
   rng_enable();
 }
-void hal_send_str(const char* in)
+
+void hal_send_char(char c)
 {
-  send_USART_str(in);
+  usart_send_blocking(USART2, c);
+}
+
+int hal_send_str(const char* in)
+{
+  return send_USART_str(in);
 }
 
 uint16_t hal_recv()

@@ -1,11 +1,11 @@
 #include "hal-stm32f4.h"
+#include "kprintf.h"
 
 int main(void) {
   hal_setup(CLOCK_BENCHMARK);
   while(1){
     uint16_t received = hal_recv();
-    hal_send_str((const char *) (&received));
-    hal_send_str("\rReceived\r\n");
+    kprintf("\r\nReceived: %c\r\n", received);
   }
 	return 0;
 }
