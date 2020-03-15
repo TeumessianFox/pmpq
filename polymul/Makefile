@@ -1,8 +1,8 @@
-PROJECT = awesomesauce
+PROJECT = polymul
 BUILD_DIR = bin
 
 SHARED_DIR = ../common
-CFILES = my-project.c
+CFILES = main.c
 CFILES += api.c
 AFILES += api-asm.S
 CFILES += hal-stm32f4.c
