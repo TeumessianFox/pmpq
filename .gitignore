@@ -4,4 +4,6 @@ bin/
 *.list
 *.s
 *.lss
+.idea/
+*.debug
 generated.*.ld
