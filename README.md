@@ -18,20 +18,34 @@ Based on https://github.com/libopencm3/libopencm3-template.git
  6. Install [st-link](https://github.com/texane/stlink.git)
 
 ## Usage
-### Run
-```
-cd polymul
-make
-```
 
-### Flash
-```
-make flash
-```
+### Python
+*Python >= 3.5  needed*
+#### Run
+To try the latest version run `host/main.py`
+
+#### M4Serial
+| Function | Parameter | Description |
+| --- | --- | --- |
+| `init()` | *void* | Flashing latest code to the M4 and setting up serial communication |
+| `simpleserial_get(...)` | *char* c | Get a payload with the leading command c |
+| `simpleserial_put(...)` | *char* c, *int array* data | Send command c with payload data |
+
+### Makefile
+*Recommended*: Use python `pypmpq.m4serial.init()` to make & flash
+| Command | Description |
+| --- | --- |
+| `make` | Compile and create .elf &  .bin |
+| `make flash` | Flash .bin on the board |
+| `make dump` | Using OBJDUMP to create dump |
+| `make clean` | Remove created files |
+
 
 ## Coding style
 
-Please follow the [coding style](https://www.kernel.org/doc/Documentation/process/coding-style.rst) for C.
+**C language:** [kernel coding style](https://www.kernel.org/doc/Documentation/process/coding-style.rst)
+
+**Python:** [PEP8](https://www.python.org/dev/peps/pep-0008/) using [Flake8](https://flake8.pycqa.org/en/latest/)
 
 ## Authors
 
