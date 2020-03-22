@@ -6,9 +6,9 @@
 #define SIMPLESERIAL_H
 
 #include <stdint.h>
+#include "config.h"
 
 #define MAX_SS_CMDS 10
-#define MAX_SS_LEN 1048
 
 #define GET_ERROR   -1
 
@@ -27,7 +27,7 @@ void simpleserial_init(void);
 // - Returns 1 if either of these fail; otherwise 0
 // - The callback function returns a number in [0x00, 0xFF] as a status code;
 //   in protocol v1.1, this status code is returned through a "z" message
-int simpleserial_addcmd(char c, unsigned int len, uint8_t (*fp)(int, uint8_t*));
+int simpleserial_addcmd(char c, unsigned int len, uint16_t (*fp)(int, uint16_t*));
 
 // Attempt to process a command 
 // If a full string is found, the relevant callback function is called
@@ -41,6 +41,6 @@ int simpleserial_get(void);
 // Write some data to the serial port
 // Prepends the character c to the start of the line
 // Example: simpleserial_put('r', 16, ciphertext)
-void simpleserial_put(char c, int size, uint8_t* output);
+void simpleserial_put(char c, int size, uint16_t* output);
 
 #endif // SIMPLESERIAL_H

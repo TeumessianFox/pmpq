@@ -1,16 +1,10 @@
 import m4serial
+import pq_testing
 
 
 def main():
     m4serial.init()
-    m4serial.simpleserial_put('k', [1, 2, 3, 4])
-    result = m4serial.simpleserial_get('r')
-    print(result)
-    m4serial.simpleserial_put('p', [4, 3, 2, 1])
-    result = m4serial.simpleserial_get('r')
-    print(result)
-    result = m4serial.simpleserial_get('r')
-    print(result)
+    pq_testing.test_m4_pq(666)
 
 
 if __name__ == "__main__":

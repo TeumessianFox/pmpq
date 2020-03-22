@@ -6,8 +6,9 @@ CFILES = main.c
 CFILES += api.c
 AFILES += api-asm.S
 CFILES += hal-stm32f4.c
-CFILES += kprintf.c
+CFILES += dprintf.c
 CFILES += simpleserial.c
+CFILES += textbook.c
 
 DEVICE=stm32f407vgt6
 
