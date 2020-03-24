@@ -4,6 +4,7 @@
  */
 
 #include <stdint.h>
+#include <string.h>
 #include "hal-stm32f4.h"
 #include "dprintf.h"
 #include "simpleserial.h"
@@ -21,6 +22,9 @@ static uint16_t recv_key(int size, uint16_t* data)
   for(int i = 0; i < size; i++){
     key[i] = data[i];
   }
+  for(int i = size; i < MAX_SS_LEN; i++){
+    key[i] = 0;
+  }
   return 0x00;
 }
 
@@ -30,6 +34,9 @@ static uint16_t recv_plain(int size, uint16_t* data)
   for(int i = 0; i < size; i++){
     text[i] = data[i];
   }
+  for(int i = size; i < MAX_SS_LEN; i++){
+    text[i] = 0;
+  }
   return 0x00;
 }
 
@@ -38,10 +45,11 @@ static int init(void)
   hal_setup(CLOCK_BENCHMARK);
   simpleserial_init();
   int status1 = simpleserial_addcmd('k', MAX_SS_LEN, recv_key);
-  int status2 = simpleserial_addcmd('p', MAX_SS_LEN, recv_plain);
   if(status1){
     return status1;
-  } else if(status2){
+  }
+  int status2 = simpleserial_addcmd('p', MAX_SS_LEN, recv_plain);
+  if(status2){
     return status2;
   }
   return 0;
@@ -74,12 +82,17 @@ int main(void) {
     result[i] = 0;
   }
   int status = 0;
-  status = polynomial_multiplication(
-              (uint16_t *)key, key_length,
-              (uint16_t *)text, text_length,
-              result);
 
-  simpleserial_put('r', result_length, (uint16_t *)result);
+  uint64_t t0 = hal_get_time();
+  status = polynomial_multiplication(
+              key, key_length,
+              text, text_length,
+              result);
+  uint64_t t1 = hal_get_time();
+  uint64_t cycles = t1-t0;
+
+  simpleserial_put('c', 4, (uint16_t *) &cycles);
+  simpleserial_put('r', result_length, result);
   simpleserial_put('z', 1, (uint16_t *) &status);
 
 	return 0;
