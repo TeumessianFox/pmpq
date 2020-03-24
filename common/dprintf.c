@@ -7,6 +7,32 @@
 #define UNDEFINED_IDENTIFIER -2
 #define MAX_LEN_INT 11
 
+static void unsigned_long_long_to_str(uint64_t n, char *buffer, int *counter)
+{
+  int i = 0;
+  uint64_t n1 = n;
+
+  while(n1!=0){
+    buffer[i++] = n1%10+'0';
+    n1=n1/10;
+    (*counter)++;
+  }
+
+  buffer[i] = '\0';
+
+  for(int t = 0; t < i/2; t++){
+    buffer[t] ^= buffer[i-t-1];
+    buffer[i-t-1] ^= buffer[t];
+    buffer[t] ^= buffer[i-t-1];
+  }
+
+  if(n == 0){
+    buffer[0] = '0';
+    buffer[1] = '\0';
+    (*counter)++;
+  }
+}
+
 static void signed_int_to_str(int n, char *buffer, int *counter)
 {
   int i = 0;
@@ -159,6 +185,16 @@ int kprintf(char *format,...)
       case 'u':
         unsigned_int_to_str(va_arg(arg,uint32_t), str, &count);
         hal_send_str(str);
+        break;
+      case 'l':
+        traverse++;
+        if(*traverse == 'l'){
+          traverse++;
+          if(*traverse == 'u'){
+            unsigned_long_long_to_str(va_arg(arg, uint64_t), str, &count);
+            hal_send_str(str);
+          }
+        }
         break;
       case 'p':
         ;
