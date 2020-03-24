@@ -5,5 +5,5 @@ bin/
 *.s
 *.lss
 .idea/
-*.debug
+*.log
 generated.*.ld
