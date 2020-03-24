@@ -1,6 +1,5 @@
 import serial
 import subprocess
-import time
 from numpy import zeros, uint16
 
 BAUDRATE = 115200
@@ -9,37 +8,35 @@ MAX_LEN = 1024
 
 ser = serial.Serial()
 
-
 def init():
     make()
     flash()
-    #time.sleep(1)
     ser.baudrate = BAUDRATE
     ser.port = DEVICE
     ser.open()
 
 
 def make():
-    with open("make.debug", 'w') as f:
+    with open("log/make.log", 'w') as f:
         build = subprocess.run(["make -C ../polymul/"], shell=True, stdout=f, text=True)
         if build.returncode != 0:
             print("Error in:")
             print("make -C ../polymul/")
             print("Use Python >= 3.5")
             exit(1)
-    with open("make.debug", 'r') as f:
+    with open("log/make.log", 'r') as f:
         print(f.read())
 
 
 def flash():
-    with open("flash.debug", 'w') as f:
+    with open("log/flash.log", 'w') as f:
         build = subprocess.run(["make flash -C ../polymul/"], shell=True, stdout=f, text=True)
         if build.returncode != 0:
             print("Error in:")
             print("make flash -C ../polymul/")
             print("Check if board is connected")
             exit(1)
-    with open("make.debug", 'r') as f:
+    with open("log/flash.log", 'r') as f:
         print(f.read())
 
 
@@ -78,7 +75,7 @@ def recombine_byte(twoint):
     return (twoint[0] << 4) + twoint[1]
 
 
-def simpleserial_get(c):
+def simpleserial_get(c: str):
     symbol = c.encode("utf-8")
     while True:
         c = ser.read(1)
@@ -88,7 +85,7 @@ def simpleserial_get(c):
             while last != b'\n':
                 string += last.decode('utf-8')
                 last = ser.read(1)
-            print("DEBUG: " + string)
+            print("M4 DEBUG: " + string)
         if c == symbol:
             break
     end = 0
@@ -100,9 +97,9 @@ def simpleserial_get(c):
             break
         bytetwo = ser.read(1)
         recv_int8.append(recombine_byte(utf8_to_byte(byteone + bytetwo)))
-    recv_int16 = list()
+    recv_int16 = zeros(shape=len(recv_int8)//2, dtype=uint16)
     for x in range(len(recv_int8)//2):
-        recv_int16.append(bytes_to_int16([recv_int8[2*x], recv_int8[2*x+1]])[0])
+        recv_int16[x] = bytes_to_int16([recv_int8[2*x], recv_int8[2*x+1]])[0]
     if end != 1:
         c = ser.read(1)
         if c != b'\n':
