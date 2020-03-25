@@ -5,9 +5,12 @@
 /* Make changes as needed */
 
 /* POLYMUL must be defined as the polynomial multiplication which should be used */
-#define POLYMUL TEXTBOOK
+// #define POLYMUL TEXTBOOK
+/* Used for automated tests using python */
+#include "auto_python_tests.h"
 
 #define TEXTBOOK 1
+#define HALF_TEXTBOOK 2
 
 /* Max amount of uint16_t to be received by a command */
 #define MAX_SS_LEN 1024
@@ -24,6 +27,9 @@
 #if POLYMUL == TEXTBOOK
   #include "textbook.h"
   #define polynomial_multiplication(args...) textbook(args)
+#elif POLYMUL == HALF_TEXTBOOK
+  #include "half_textbook.h"
+  #define polynomial_multiplication(args...) half_textbook(args)
 #endif
 
 /* End of user changes */

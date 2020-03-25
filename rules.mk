@@ -56,7 +56,7 @@ INCLUDES += $(patsubst %,-I%, . $(OPENCM3_INC) )
 
 OBJS = $(CFILES:%.c=$(BUILD_DIR)/%.o)
 OBJS += $(AFILES:%.S=$(BUILD_DIR)/%.o)
-GENERATED_BINS = $(PROJECT).elf $(PROJECT).bin $(PROJECT).map $(PROJECT).list $(PROJECT).lss $(PROJECT).s
+GENERATED_BINS = $(PROJECT).elf $(PROJECT).hex $(PROJECT).bin $(PROJECT).map $(PROJECT).list $(PROJECT).lss $(PROJECT).s
 
 TGT_CPPFLAGS += -MD
 TGT_CPPFLAGS += -Wall -Wundef $(INCLUDES)
@@ -97,7 +97,7 @@ LDLIBS += -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
 
 # Burn in legacy hell fortran modula pascal yacc idontevenwat
 .SUFFIXES:
-.SUFFIXES: .c .S .h .o .cxx .elf .bin .list .lss .s
+.SUFFIXES: .c .S .h .o .cxx .elf .bin .list .lss .s .hex
 
 # Bad make, never *ever* try to get a file out of source control by yourself.
 %: %,v
@@ -106,7 +106,7 @@ LDLIBS += -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
 %: s.%
 %: SCCS/s.%
 
-all: $(PROJECT).elf $(PROJECT).bin
+all: $(PROJECT).elf $(PROJECT).bin $(PROJECT).hex
 dump: $(PROJECT).list $(PROJECT).lss $(PROJECT).s
 
 # error if not using linker script generator
@@ -143,6 +143,10 @@ $(PROJECT).elf: $(OBJS) $(LDSCRIPT) $(LIBDEPS)
 %.bin: %.elf
 	@printf "  OBJCOPY\t$@\n"
 	$(Q)$(OBJCOPY) -O binary  $< $@
+
+%.hex: %.elf
+	@printf "  OBJCOPY\t$@\n"
+	$(Q)$(OBJCOPY) -O ihex -R .eeprom -R .fuse -R .lock -R .signature $< $@
 
 %.lss: %.elf
 	$(OBJDUMP) -h -S $< > $@

@@ -9,10 +9,9 @@ int textbook(
     int text_length,
     uint16_t *result)
 {
-  for(int i = 0; i < key_length; i++){
-    for(int j = 0; j < text_length; j++){
-      result[i+j] += key[i] * text[j];
-      // TODO: check for overflow?!
+  for(int k = 0; k < key_length; k++){
+    for(int t = 0; t < text_length; t++){
+      result[k+t] += key[k] * text[t];
     }
   }
   return 0x00;

@@ -1,12 +1,14 @@
 import serial
 import subprocess
 from numpy import zeros, uint16
+import logging
 
 BAUDRATE = 115200
 DEVICE = "/dev/ttyUSB0"
 MAX_LEN = 1024
 
 ser = serial.Serial()
+
 
 def init():
     make()
@@ -16,28 +18,31 @@ def init():
     ser.open()
 
 
+def end():
+    ser.close()
+
+
 def make():
+    subprocess.run(["mkdir -p log"], shell=True)
     with open("log/make.log", 'w') as f:
         build = subprocess.run(["make -C ../polymul/"], shell=True, stdout=f, text=True)
         if build.returncode != 0:
-            print("Error in:")
-            print("make -C ../polymul/")
-            print("Use Python >= 3.5")
+            logging.critical("make -C ../polymul/")
+            logging.critical("Use Python >= 3.5")
             exit(1)
     with open("log/make.log", 'r') as f:
-        print(f.read())
+        logging.debug(f.read())
 
 
 def flash():
     with open("log/flash.log", 'w') as f:
-        build = subprocess.run(["make flash -C ../polymul/"], shell=True, stdout=f, text=True)
+        build = subprocess.run(["make flash -C ../polymul/"], shell=True, stdout=f, stderr=f, text=True)
         if build.returncode != 0:
-            print("Error in:")
-            print("make flash -C ../polymul/")
-            print("Check if board is connected")
+            logging.critical("make flash -C ../polymul/")
+            logging.critical("Check if board is connected")
             exit(1)
     with open("log/flash.log", 'r') as f:
-        print(f.read())
+        logging.debug(f.read())
 
 
 def int16_to_bytes(arr):
@@ -85,7 +90,7 @@ def simpleserial_get(c: str):
             while last != b'\n':
                 string += last.decode('utf-8')
                 last = ser.read(1)
-            print("M4 DEBUG: " + string)
+            logging.info("M4: " + string)
         if c == symbol:
             break
     end = 0
@@ -103,7 +108,7 @@ def simpleserial_get(c: str):
     if end != 1:
         c = ser.read(1)
         if c != b'\n':
-            print("End of transmission '\n' not received")
+            logging.error("End of transmission '\n' not received")
     return recv_int16
 
 

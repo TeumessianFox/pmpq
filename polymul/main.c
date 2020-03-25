@@ -4,7 +4,6 @@
  */
 
 #include <stdint.h>
-#include <string.h>
 #include "hal-stm32f4.h"
 #include "dprintf.h"
 #include "simpleserial.h"
