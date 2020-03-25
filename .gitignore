@@ -6,4 +6,5 @@ bin/
 *.lss
 .idea/
 *.log
+*.hex
 generated.*.ld
