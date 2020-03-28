@@ -1,6 +1,4 @@
-#include "config.h"
-#include <stdint.h>
-
+#include "textbook.h"
 
 int textbook(
     uint16_t *key,

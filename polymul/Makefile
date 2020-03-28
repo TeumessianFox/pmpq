@@ -3,12 +3,12 @@ BUILD_DIR = bin
 
 SHARED_DIR = ../common
 CFILES = main.c
-CFILES += api.c
 AFILES += api-asm.S
 CFILES += hal-stm32f4.c
 CFILES += dprintf.c
 CFILES += simpleserial.c
-include auto_python_file.mk
+CFILES += textbook.c
+CFILES += karatsuba.c
 
 DEVICE=stm32f407vgt6
 

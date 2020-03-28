@@ -10,7 +10,7 @@
 #include "auto_python_tests.h"
 
 #define TEXTBOOK 1
-#define HALF_TEXTBOOK 2
+#define KARATSUBA 2
 
 /* Max amount of uint16_t to be received by a command */
 #define MAX_SS_LEN 1024
@@ -27,9 +27,9 @@
 #if POLYMUL == TEXTBOOK
   #include "textbook.h"
   #define polynomial_multiplication(args...) textbook(args)
-#elif POLYMUL == HALF_TEXTBOOK
-  #include "half_textbook.h"
-  #define polynomial_multiplication(args...) half_textbook(args)
+#elif POLYMUL == KARATSUBA
+  #include "karatsuba.h"
+  #define polynomial_multiplication(args...) karatsuba(args)
 #endif
 
 /* End of user changes */
