@@ -85,7 +85,8 @@ static int send_USART_str(const char* in)
 }
 void hal_setup(const enum clock_mode clock)
 {
-  clock_setup(clock);
+  (void)(clock);
+  clock_setup(CLOCK_FAST);
   gpio_setup();
   usart_setup(38400);
   systick_setup();
