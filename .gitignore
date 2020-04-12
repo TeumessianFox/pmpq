@@ -7,4 +7,6 @@ bin/
 .idea/
 *.log
 *.hex
+*.npy
+__pycache__/
 generated.*.ld
