@@ -8,7 +8,7 @@ import logging
 # Streamlined NTRU Prime: sntrup4591761
 P, Q, W = 761, 4591, 286
 
-POLYMUL_ALGOS = ["TEXTBOOK", "KARATSUBA"]
+POLYMUL_ALGOS = ["TEXTBOOK", "KARATSUBA", "ASM_SCHOOLBOOK_24"]
 
 
 def init(algo: str):
@@ -77,10 +77,12 @@ def test_m4_pq(algo, key_num, text_num):
         logging.critical("M4 Error when receiving the plain text")
         exit(1)
 
-    cycles_uit16 = m4serial.simpleserial_get('c')
-    cycles = uint16_to_uint64(cycles_uit16)
+    cycles_uit8 = m4serial.simpleserial_get('c')
+    cycles_uint16 = m4serial.uint8_to_uint16(cycles_uit8)
+    cycles = uint16_to_uint64(cycles_uint16)
     logging.info("Cycles: " + str(cycles))
-    output = m4serial.simpleserial_get('r')
+    output8 = m4serial.simpleserial_get('r')
+    output = m4serial.uint8_to_uint16(output8)
 
     expected = np.zeros(shape=len(key_num) + len(text_num), dtype=uint16)
     for i in range(len(key_num)):

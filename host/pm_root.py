@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os.path
-import scipy.stats as stats
 
 MIN_LEN = 128
 MAX_LEN = 1024
@@ -114,16 +113,7 @@ def find_loss_mean_std(numbers, counter):
     return losses, mean, std
 
 
-def main():
-    plt.close('all')
-
-    numbers = create_numbers()
-    sequences = create_sequences()
-    divider = create_divider(numbers, sequences)
-    counter = count_base_for_numbers(numbers, divider)
-    common_counter = find_common_bases(numbers, counter)
-    losses, mean, std = find_loss_mean_std(numbers, counter)
-
+def plot_bases(losses, mean, std):
     for base in range(13):
         loss = np.linspace(0, 25, 25)
         plt.figure(base)
@@ -137,6 +127,18 @@ def main():
         plt.text(3, losses[base][base+12] - 50, r'$\sigma={:.4f}$'.format(std[base]))
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("base/schoolbook_{}x{}.pdf".format(base+12, base+12), bbox_inches='tight')
+
+
+def main():
+    plt.close('all')
+
+    numbers = create_numbers()
+    sequences = create_sequences()
+    divider = create_divider(numbers, sequences)
+    counter = count_base_for_numbers(numbers, divider)
+    common_counter = find_common_bases(numbers, counter)
+    losses, mean, std = find_loss_mean_std(numbers, counter)
+    plot_bases(losses, mean, std)
 
 
 if __name__ == "__main__":

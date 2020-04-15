@@ -8,7 +8,7 @@ typedef struct ss_cmd
 {
 	char c;
 	unsigned int len;
-	uint16_t (*fp)(int, uint16_t*);
+	uint8_t (*fp)(int, uint16_t*);
 } ss_cmd;
 
 static ss_cmd commands[MAX_SS_CMDS];
@@ -51,7 +51,7 @@ static int hex_decode(int len, char* ascii_buf, uint8_t* data_buf)
 
 // Callback function for "v" command.
 // This can exist in v1.0 as long as we don't actually send back an ack ("z")
-static uint16_t check_version(int size, uint16_t* v)
+static uint8_t check_version(int size, uint16_t* v)
 {
   /* To avoid unused parameter warnings */
   (void)(size);
@@ -67,7 +67,7 @@ void simpleserial_init()
 	simpleserial_addcmd('v', 0, check_version);
 }
 
-int simpleserial_addcmd(char c, unsigned int len, uint16_t (*fp)(int, uint16_t*))
+int simpleserial_addcmd(char c, unsigned int len, uint8_t (*fp)(int, uint16_t*))
 {
 	if(num_commands >= MAX_SS_CMDS)
 		return 1;
@@ -100,7 +100,7 @@ int simpleserial_get(void)
 
 	// If we didn't find a match, give up right away
 	if(cmd == num_commands){
-    uint16_t error1 = 1;
+    uint8_t error1 = 1;
     simpleserial_put('z', 1, &error1);
 		return GET_ERROR;
   }
@@ -123,7 +123,7 @@ int simpleserial_get(void)
 
   // Check for even number of uint16_t
   if(i % 2 != 0){
-    uint16_t error2 = 2;
+    uint8_t error2 = 2;
     simpleserial_put('z', 1, &error2);
     return GET_ERROR;
   }
@@ -132,7 +132,7 @@ int simpleserial_get(void)
   if(end == 0){
     c = hal_recv();
     if(c != '\n' && c != '\r'){
-      uint16_t error3 = 3;
+      uint8_t error3 = 3;
       simpleserial_put('z', 1, &error3);
       return GET_ERROR;
     }
@@ -142,30 +142,28 @@ int simpleserial_get(void)
 	// Check for illegal characters here
 	uint8_t data8_buf[i/2];
 	if(hex_decode(i/2, ascii_buf, data8_buf)){
-    uint16_t error4 = 4;
+    uint8_t error4 = 4;
     simpleserial_put('z', 1, &error4);
 		return GET_ERROR;
   }
 
-  uint16_t *data16_buf = (uint16_t *) data8_buf;
-
 	// Callback
-	uint16_t ret;
-	ret = commands[cmd].fp(i/4, data16_buf);
+	uint8_t ret;
+	ret = commands[cmd].fp(i/4, (uint16_t *)data8_buf);
 	
 	simpleserial_put('z', 1, &ret);
 
   return i/4;
 }
 
-void simpleserial_put(char c, int size, uint16_t* output)
+void simpleserial_put(char c, int size, uint8_t* output)
 {
 	// Write first character
 	hal_send_char(c);
 
 	// Write each byte as two nibbles
   uint8_t *bytes = (uint8_t *) output;
-	for(int i = 0; i < 2*size; i++)
+	for(int i = 0; i < size; i++)
 	{
 		hal_send_char((char) hex_lookup[bytes[i] >> 4]);
 		hal_send_char((char) hex_lookup[bytes[i] & 0xF]);

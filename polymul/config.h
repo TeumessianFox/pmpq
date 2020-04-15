@@ -9,8 +9,9 @@
 /* Used for automated tests using python */
 #include "auto_python_tests.h"
 
-#define TEXTBOOK 1
-#define KARATSUBA 2
+#define TEXTBOOK             1
+#define KARATSUBA            2
+#define ASM_SCHOOLBOOK_24    3
 
 /* Max amount of uint16_t to be received by a command */
 #define MAX_SS_LEN 1024
@@ -30,6 +31,9 @@
 #elif POLYMUL == KARATSUBA
   #include "karatsuba.h"
   #define polynomial_multiplication(args...) karatsuba(args)
+#elif POLYMUL == ASM_SCHOOLBOOK_24
+  #include "schoolbook_24x24.h"
+  #define polynomial_multiplication(key, key_length, text, text_length, result) schoolbook_24x24(result, key, text)
 #endif
 
 /* End of user changes */

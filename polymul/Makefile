@@ -1,23 +1,25 @@
 PROJECT = polymul
 BUILD_DIR = bin
 
+TARGET_HW =
+
+ifeq ($(TARGET_HW),)
+		CFILES = main.c
+		CFILES += hal-stm32f4.c
+		DEVICE = stm32f407vgt6
+else
+		CFILES = main_cw.c
+		CFILES += hal-stm32f4_cw.c
+		DEVICE = stm32f405rgt6
+endif
+
 SHARED_DIR = ../common
-CFILES = main.c
 AFILES += api-asm.S
 CFILES += dprintf.c
 CFILES += simpleserial.c
 CFILES += textbook.c
 CFILES += karatsuba.c
-
-
-DEVICE = stm32f407vgt6
-#DEVICE = stm32f405rgt6
-
-ifeq ($(DEVICE),stm32f407vgt6)
-		CFILES += hal-stm32f4.c
-else
-		CFILES += hal-stm32f4_cw.c
-endif
+AFILES += schoolbook_24x24.S
 
 
 # You shouldn't have to edit anything below here.

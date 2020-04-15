@@ -80,6 +80,14 @@ def recombine_byte(twoint):
     return (twoint[0] << 4) + twoint[1]
 
 
+def uint8_to_uint16(recv_uint8):
+    assert len(recv_uint8) % 2 == 0
+    recv_uint16 = zeros(shape=len(recv_uint8)//2, dtype=uint16)
+    for x in range(len(recv_uint8)//2):
+        recv_uint16[x] = bytes_to_int16([recv_uint8[2*x], recv_uint8[2*x+1]])[0]
+    return recv_uint16
+
+
 def simpleserial_get(c: str):
     symbol = c.encode("utf-8")
     while True:
@@ -102,14 +110,11 @@ def simpleserial_get(c: str):
             break
         bytetwo = ser.read(1)
         recv_int8.append(recombine_byte(utf8_to_byte(byteone + bytetwo)))
-    recv_int16 = zeros(shape=len(recv_int8)//2, dtype=uint16)
-    for x in range(len(recv_int8)//2):
-        recv_int16[x] = bytes_to_int16([recv_int8[2*x], recv_int8[2*x+1]])[0]
     if end != 1:
         c = ser.read(1)
         if c != b'\n':
             logging.error("End of transmission '\n' not received")
-    return recv_int16
+    return recv_int8
 
 
 hex_lookup = [b'0', b'1', b'2', b'3', b'4', b'5', b'6', b'7', b'8', b'9', b'A', b'B', b'C', b'D', b'E', b'F']

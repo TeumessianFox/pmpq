@@ -15,7 +15,7 @@ uint16_t text[MAX_SS_LEN];
 int text_length = 0;
 int result_length = 0;
 
-static uint16_t recv_key(int size, uint16_t* data)
+static uint8_t recv_key(int size, uint16_t* data)
 {
   key_length = size;
   for(int i = 0; i < size; i++){
@@ -27,7 +27,7 @@ static uint16_t recv_key(int size, uint16_t* data)
   return 0x00;
 }
 
-static uint16_t recv_plain(int size, uint16_t* data)
+static uint8_t recv_plain(int size, uint16_t* data)
 {
   text_length = size;
   for(int i = 0; i < size; i++){
@@ -56,7 +56,7 @@ static int init(void)
 
 int main(void) {
   int init_status = init();
-  simpleserial_put('z', 1, (uint16_t *) &init_status);
+  simpleserial_put('z', 1, (uint8_t *) &init_status);
   if(init_status){
     return init_status;
   }
@@ -90,9 +90,9 @@ int main(void) {
   uint64_t t1 = hal_get_time();
   uint64_t cycles = t1-t0;
 
-  simpleserial_put('c', 4, (uint16_t *) &cycles);
-  simpleserial_put('r', result_length, result);
-  simpleserial_put('z', 1, (uint16_t *) &status);
+  simpleserial_put('c', 8, (uint8_t *) &cycles);
+  simpleserial_put('r', 2*result_length, (uint8_t *)result);
+  simpleserial_put('z', 1, (uint8_t *) &status);
 
 	return 0;
 }
