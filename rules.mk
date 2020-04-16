@@ -172,6 +172,6 @@ dump:
 clean:
 	rm -rf $(BUILD_DIR) $(GENERATED_BINS)
 
-.PHONY: all clean flash dump cw
+.PHONY: all clean flash dump
 -include $(OBJS:.o=.d)
 

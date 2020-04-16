@@ -50,8 +50,8 @@ static void clock_setup(const enum clock_mode clock)
 
 static void gpio_setup(void)
 {
-  gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_PULLUP, GPIO9 | GPIO10);
-  gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO9 | GPIO10);
+  gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO9 | GPIO10);
+  //gpio_set_output_options(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO9 | GPIO10);
   gpio_set_af(GPIOA, GPIO_AF7, GPIO9 | GPIO10);
 }
 
@@ -85,8 +85,7 @@ static int send_USART_str(const char* in)
 }
 void hal_setup(const enum clock_mode clock)
 {
-  (void)(clock);
-  clock_setup(CLOCK_FAST);
+  clock_setup(clock);
   gpio_setup();
   usart_setup(38400);
   systick_setup();
