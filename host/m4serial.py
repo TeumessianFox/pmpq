@@ -25,9 +25,9 @@ def end():
 def make():
     subprocess.run(["mkdir -p log"], shell=True)
     with open("log/make.log", 'w') as f:
-        build = subprocess.run(["make -C ../polymul/"], shell=True, stdout=f, text=True)
+        build = subprocess.run(["make -C ../m4/"], shell=True, stdout=f, text=True)
         if build.returncode != 0:
-            logging.critical("make -C ../polymul/")
+            logging.critical("make -C ../m4/")
             logging.critical("Use Python >= 3.5")
             exit(1)
     with open("log/make.log", 'r') as f:
@@ -36,9 +36,9 @@ def make():
 
 def flash():
     with open("log/flash.log", 'w') as f:
-        build = subprocess.run(["make flash -C ../polymul/"], shell=True, stdout=f, stderr=f, text=True)
+        build = subprocess.run(["make flash -C ../m4/"], shell=True, stdout=f, stderr=f, text=True)
         if build.returncode != 0:
-            logging.critical("make flash -C ../polymul/")
+            logging.critical("make flash -C ../m4/")
             logging.critical("Check if board is connected")
             exit(1)
     with open("log/flash.log", 'r') as f:
