@@ -36,7 +36,6 @@ static uint8_t recv_plain(int size, uint16_t* data)
   for(int i = size; i < MAX_SS_LEN; i++){
     text[i] = 0;
   }
-  simpleserial_put('r', text_length * 2, (uint8_t *)text);
   return 0x00;
 }
 
