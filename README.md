@@ -8,7 +8,7 @@ Based on https://github.com/libopencm3/libopencm3-template.git
 ### arm-none-eabi toolchain:
  On Linux systems:
  
- 3. ```git apt install arm-none-eabi-gcc```
+ 3. ```sudo apt install arm-none-eabi-gcc```
 
 ### Libopencm3:
  4. ```git submodule update --init```
