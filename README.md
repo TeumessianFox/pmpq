@@ -1,5 +1,4 @@
 # Polynomial multiplication for post-quantum algorithms
-Based on https://github.com/libopencm3/libopencm3-template.git
 
 ## Install
  1. ```git clone https://github.com/TeumessianFox/pmpq.git```
@@ -22,10 +21,17 @@ Based on https://github.com/libopencm3/libopencm3-template.git
 
 ## Usage
 
+The main objective of this library is to provide different implementations of polynomial multiplication for post-quantum crypto algorithms.
+
+### Target
+The **STM32F407G-DISCOVERY** is used for the [pqm4](https://github.com/mupq/pqm4) contest and also the main target for this library. 
+
+Flashable .hex files can also be generated for the **Chipwhisperer**.
+
 ### Python
 *Python >= 3.5  needed*
 #### Run
-Run `host/main.py` to try every supported polynomial moltiplication once and gather results & cycle count.
+Run `host/main.py` to try every supported polynomial multiplication on the STM32F407G-DISCOVERY once and gather results & cycle count.
 
 #### pq_testing
 Access `pq_testing.POLYMUL_ALGOS` to gather viable **algo**
@@ -65,3 +71,7 @@ To generate .hex file for cw use in `cw/`
 ## Authors
 
 [Patrick Gersch](https://github.com/teumessianfox/)
+
+## Credits
+
+Based on https://github.com/libopencm3/libopencm3-template.git
