@@ -12,6 +12,8 @@
 #define TEXTBOOK             1
 #define KARATSUBA            2
 #define ASM_SCHOOLBOOK_24    3
+#define ASM_TESTING          4
+#define KARATSUBA_ONLY       5
 
 /* Max amount of uint16_t to be received by a command */
 #define MAX_SS_LEN 1024
@@ -34,6 +36,12 @@
 #elif POLYMUL == ASM_SCHOOLBOOK_24
   #include "schoolbook_24x24.h"
   #define polynomial_multiplication(key, key_length, text, text_length, result) schoolbook_24x24(result, key, text)
+#elif POLYMUL == ASM_TESTING
+  #include "asm_testing.h"
+  #define polynomial_multiplication(key, key_length, text, text_length, result) asm_testing(result, key, text)
+#elif POLYMUL == KARATSUBA_ONLY
+  #include "karatsuba_only.h"
+  #define polynomial_multiplication(args...) karatsuba_only(args)
 #endif
 
 /* End of user changes */

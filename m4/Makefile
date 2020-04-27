@@ -12,8 +12,10 @@ CFILES += dprintf.c
 CFILES += simpleserial.c
 CFILES += textbook.c
 CFILES += karatsuba.c
+CFILES += karatsuba_only.c
 
 AFILES += schoolbook_24x24.S
+AFILES += asm_testing.S
 
 
 # You shouldn't have to edit anything below here.
