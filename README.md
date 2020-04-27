@@ -16,6 +16,9 @@ Based on https://github.com/libopencm3/libopencm3-template.git
 
 ### stlink:
  6. Install [st-link](https://github.com/texane/stlink.git)
+ 
+### serial:
+ 7. ```python3 -m pip3 install pyserial```
 
 ## Usage
 
@@ -34,14 +37,24 @@ Access `pq_testing.POLYMUL_ALGOS` to gather viable **algo**
 | `test_m4_pq(...)` | algo: *str*, key: *int array*, text: *int array* | Run specific **algo** for specific parameter |
 
 ### Makefile
-*Recommended*: Use python `pypmpq.m4serial.init()` or better `pq_testing.init()` to make & flash
+
+#### STM32F407G-DISCOVERY
+*Recommended*: Use python `pq_testing.init()` to make & flash
+
+For manual use in `m4/`
 | Command | Description |
 | --- | --- |
-| `make` | Compile and create .elf & .bin & .hex |
+| `make` | Compile and create .elf & .bin|
 | `make flash` | Flash .bin on the board |
 | `make dump` | Using OBJDUMP to create dump |
 | `make clean` | Remove created files |
 
+#### Chipwhisperer
+To generate .hex file for cw use
+| Command | Description |
+| --- | --- |
+| `make` | Compile and create .elf & .hex|
+| `make clean` | Remove created files |
 
 ## Coding style
 
