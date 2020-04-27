@@ -50,7 +50,7 @@ For manual use in `m4/`
 | `make clean` | Remove created files |
 
 #### Chipwhisperer
-To generate .hex file for cw use
+To generate .hex file for cw use in `cw/`
 | Command | Description |
 | --- | --- |
 | `make` | Compile and create .elf & .hex|
