@@ -8,6 +8,9 @@ DEVICE = stm32f407vgt6
 SHARED_DIR = ../common
 SHARED_DIR += ../polymul
 
+POLYMUL ?= TEXTBOOK
+TGT_CFLAGS += -D POLYMUL=$(POLYMUL)
+
 CFILES += dprintf.c
 CFILES += simpleserial.c
 CFILES += textbook.c

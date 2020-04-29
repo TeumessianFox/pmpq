@@ -10,8 +10,8 @@ MAX_LEN = 1024
 ser = serial.Serial()
 
 
-def init():
-    make()
+def init(algo: str):
+    make(algo)
     flash()
     ser.baudrate = BAUDRATE
     ser.port = DEVICE
@@ -22,12 +22,14 @@ def end():
     ser.close()
 
 
-def make():
+def make(algo: str):
     subprocess.run(["mkdir -p log"], shell=True)
     with open("log/make.log", 'w') as f:
-        build = subprocess.run(["make -C ../m4/"], shell=True, stdout=f, text=True)
+        subprocess.run(["make clean -C ../m4/"], shell=True, stdout=f, text=True)
+        makecommand = "make POLYMUL={} -C ../m4/".format(algo)
+        build = subprocess.run([makecommand], shell=True, stdout=f, text=True)
         if build.returncode != 0:
-            logging.critical("make -C ../m4/")
+            logging.critical(makecommand)
             logging.critical("Use Python >= 3.5")
             exit(1)
     with open("log/make.log", 'r') as f:

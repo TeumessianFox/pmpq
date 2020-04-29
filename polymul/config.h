@@ -5,9 +5,7 @@
 /* Make changes as needed */
 
 /* POLYMUL must be defined as the polynomial multiplication which should be used */
-// #define POLYMUL TEXTBOOK
-/* Used for automated tests using python */
-#include "auto_python_tests.h"
+/* Can be set using "make POLYMUL={algo}" */
 
 #define TEXTBOOK             1
 #define KARATSUBA            2

@@ -9,8 +9,8 @@ SRC += karatsuba.c
 
 ASRC += schoolbook_24x24.S
 
-EXTRA_OPTS = NO_EXTRA_OPTS
-CFLAGS += -D$(EXTRA_OPTS)
+POLYMUL ?= TEXTBOOK
+CFLAGS += -D POLYMUL=$(POLYMUL)
 
 VPATH += ../common
 EXTRAINCDIRS += ../common
