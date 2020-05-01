@@ -8,14 +8,19 @@ DEVICE = stm32f407vgt6
 SHARED_DIR = ../common
 SHARED_DIR += ../polymul
 
-POLYMUL ?= TEXTBOOK
+POLYMUL    ?= TEXTBOOK
+CHAIN_SIZE ?= 2
+CHAIN      ?= karatsuba, remapped_textbook
 TGT_CFLAGS += -D POLYMUL=$(POLYMUL)
+TGT_CFLAGS += -D CHAIN_SIZE=$(CHAIN_SIZE)
+TGT_CFLAGS += -D CHAIN="$(CHAIN)"
 
 CFILES += dprintf.c
 CFILES += simpleserial.c
 CFILES += textbook.c
 CFILES += karatsuba.c
 CFILES += karatsuba_only.c
+CFILES += polymul_chain.c
 
 AFILES += schoolbook_24x24.S
 AFILES += asm_testing.S
