@@ -1,5 +1,4 @@
 import serial
-import subprocess
 from numpy import zeros, uint16
 import logging
 
@@ -10,9 +9,7 @@ MAX_LEN = 1024
 ser = serial.Serial()
 
 
-def init(algo: str):
-    make(algo)
-    flash()
+def init():
     ser.baudrate = BAUDRATE
     ser.port = DEVICE
     ser.open()
@@ -20,31 +17,6 @@ def init(algo: str):
 
 def end():
     ser.close()
-
-
-def make(algo: str):
-    subprocess.run(["mkdir -p log"], shell=True)
-    with open("log/make.log", 'w') as f:
-        subprocess.run(["make clean -C ../m4/"], shell=True, stdout=f, text=True)
-        makecommand = "make POLYMUL={} -C ../m4/".format(algo)
-        build = subprocess.run([makecommand], shell=True, stdout=f, text=True)
-        if build.returncode != 0:
-            logging.critical(makecommand)
-            logging.critical("Use Python >= 3.5")
-            exit(1)
-    with open("log/make.log", 'r') as f:
-        logging.debug(f.read())
-
-
-def flash():
-    with open("log/flash.log", 'w') as f:
-        build = subprocess.run(["make flash -C ../m4/"], shell=True, stdout=f, stderr=f, text=True)
-        if build.returncode != 0:
-            logging.critical("make flash -C ../m4/")
-            logging.critical("Check if board is connected")
-            exit(1)
-    with open("log/flash.log", 'r') as f:
-        logging.debug(f.read())
 
 
 def int16_to_bytes(arr):

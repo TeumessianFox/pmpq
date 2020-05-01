@@ -2,18 +2,57 @@ from numpy.random import RandomState
 from numpy import uint16, zeros, uint64
 import numpy as np
 import m4serial
+import subprocess
 from datetime import datetime
 import logging
 
 # Streamlined NTRU Prime: sntrup4591761
 P, Q, W = 761, 4591, 286
 
-POLYMUL_ALGOS = ["TEXTBOOK", "KARATSUBA", "ASM_SCHOOLBOOK_24", "KARATSUBA_ONLY"]
+POLYMUL_ALGOS = ["TEXTBOOK", "ASM_SCHOOLBOOK_24", "KARATSUBA_ONLY", "POLYMUL_CHAIN"]
+CHAIN_OPTIONS = {"KARATSUBA": "karatsuba",
+                 "ASM_SCHOOLBOOK_24": "remapped_schoolbook_24x24",
+                 "TEXTBOOK": "remapped_textbook"}
 
 
-def init(algo: str):
+def init(algo: str, chain_size=0, chain=None):
     logging.info("#### Running {} ####".format(algo))
-    m4serial.init(algo)
+    if algo != "POLYMUL_CHAIN":
+        make(algo)
+    else:
+        make(algo, chain_size, chain)
+    flash()
+    m4serial.init()
+
+
+def make(algo: str, chain_size=0, chain=None):
+    subprocess.run(["mkdir -p log"], shell=True)
+    with open("log/make.log", 'w') as f:
+        subprocess.run(["make clean -C ../m4/"], shell=True, stdout=f, text=True)
+        if chain_size == 0:
+            makecommand = "make POLYMUL={} -C ../m4/".format(algo)
+        else:
+            chain_str = '"{}"'.format(", ".join([CHAIN_OPTIONS[c] for c in chain]))
+            makecommand = 'make POLYMUL={} CHAIN_SIZE={} CHAIN={} -C ../m4/'.format(algo, chain_size, chain_str)
+        logging.info(makecommand)
+        build = subprocess.run([makecommand], shell=True, stdout=f, text=True)
+        if build.returncode != 0:
+            logging.critical(makecommand)
+            logging.critical("Use Python >= 3.5")
+            exit(1)
+    with open("log/make.log", 'r') as f:
+        logging.debug(f.read())
+
+
+def flash():
+    with open("log/flash.log", 'w') as f:
+        build = subprocess.run(["make flash -C ../m4/"], shell=True, stdout=f, stderr=f, text=True)
+        if build.returncode != 0:
+            logging.critical("make flash -C ../m4/")
+            logging.critical("Check if board is connected")
+            exit(1)
+    with open("log/flash.log", 'r') as f:
+        logging.debug(f.read())
 
 
 def key_gen(seed):
