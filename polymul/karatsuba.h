@@ -7,7 +7,8 @@ int karatsuba(
     int key_length,
     uint16_t *text,
     int text_length,
-    uint16_t *result
+    uint16_t *result,
+    int depth
     );
 
 #endif

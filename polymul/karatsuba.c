@@ -1,13 +1,12 @@
-#include "karatsuba.h"
-#include "textbook.h"
-#include "dprintf.h"
+#include "config.h"
 
 int karatsuba(
     uint16_t *key,
     int key_length,
     uint16_t *text,
     int text_length,
-    uint16_t *result)
+    uint16_t *result,
+    int depth)
 {
   int half_len = key_length;
   if (half_len < text_length)
@@ -26,8 +25,8 @@ int karatsuba(
     result_low[i] = 0;
   }
 
-  textbook(key, half_len, text, half_len, result_low);
-  textbook(key + half_len, half_len, text + half_len, half_len, result_upper);
+  (*chain[depth+1])(key, half_len, text, half_len, result_low, depth+1);
+  (*chain[depth+1])(key + half_len, half_len, text + half_len, half_len, result_upper, depth+1);
 
   uint16_t key_add[half_len];
   uint16_t text_add[half_len];
@@ -35,7 +34,7 @@ int karatsuba(
     key_add[i] = key[half_len + i] + key[i];
     text_add[i] = text[half_len + i] + text[i];
   }
-  textbook(key_add, half_len, text_add, half_len, result_mid);
+  (*chain[depth+1])(key_add, half_len, text_add, half_len, result_mid,depth+1);
 
   for(int i = 0; i < result_half; i++){
     result[i] += result_low[i];
