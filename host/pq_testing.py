@@ -38,7 +38,7 @@ def make(algo: str, chain_size=0, chain=None):
         build = subprocess.run([makecommand], shell=True, stdout=f, text=True)
         if build.returncode != 0:
             logging.critical(makecommand)
-            logging.critical("Use Python >= 3.5")
+            logging.critical("Use Python >= 3.7")
             exit(1)
     with open("log/make.log", 'r') as f:
         logging.debug(f.read())

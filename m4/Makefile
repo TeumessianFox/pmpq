@@ -1,13 +1,19 @@
 PROJECT = polymul
 BUILD_DIR = bin
 
+# Example main file to use
 CFILES = main.c
 CFILES += hal-stm32f4.c
+# If simpleserial framework should be used
+CFILES += simpleserial.c
+
 DEVICE = stm32f407vgt6
 
+# Folders in which to look for .c, .S and .h files to look for
 SHARED_DIR = ../common
 SHARED_DIR += ../polymul
 
+# Only needed if using the polymul framework
 POLYMUL    ?= TEXTBOOK
 CHAIN_SIZE ?= 2
 CHAIN      ?= karatsuba, remapped_textbook
@@ -15,13 +21,14 @@ TGT_CFLAGS += -D POLYMUL=$(POLYMUL)
 TGT_CFLAGS += -D CHAIN_SIZE=$(CHAIN_SIZE)
 TGT_CFLAGS += -D CHAIN="$(CHAIN)"
 
+# C files to be compiled
 CFILES += dprintf.c
-CFILES += simpleserial.c
 CFILES += textbook.c
 CFILES += karatsuba.c
 CFILES += karatsuba_only.c
 CFILES += polymul_chain.c
 
+# Assembly files to compile
 AFILES += schoolbook_24x24.S
 AFILES += asm_testing.S
 

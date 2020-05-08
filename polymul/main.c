@@ -8,6 +8,7 @@
 #include "simpleserial.h"
 #include "dprintf.h"
 #include "config.h"
+#include "common_config.h"
 
 uint16_t key[MAX_SS_LEN];
 int key_length = 0;

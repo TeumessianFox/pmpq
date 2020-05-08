@@ -6,7 +6,7 @@
 #define SIMPLESERIAL_H
 
 #include <stdint.h>
-#include "config.h"
+#include "common_config.h"
 
 #define MAX_SS_CMDS 10
 

@@ -24,7 +24,9 @@
 #include "asm_testing.h"
 #include "karatsuba_only.h"
 #include "schoolbook_24x24.h"
-#include "polymul_chain.h"
+#ifdef CHAIN_SIZE
+  #include "polymul_chain.h"
+#endif
 #if POLYMUL == TEXTBOOK
   #define polynomial_multiplication(args...) textbook(args)
 #elif POLYMUL == KARATSUBA
@@ -38,8 +40,5 @@
 #elif POLYMUL == POLYMUL_CHAIN
   #define polynomial_multiplication(args...) polymul_chain(args)
 #endif
-
-/* Max amount of uint16_t to be received by a command */
-#define MAX_SS_LEN 1024
 
 #endif

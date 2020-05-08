@@ -7,6 +7,7 @@
 #include "hal.h"
 #include "config.h"
 #include "simpleserial_cw.h"
+#include "common_config.h"
 
 uint16_t key[MAX_SS_LEN];
 int key_length = 0;
