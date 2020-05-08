@@ -29,7 +29,7 @@ The **STM32F407G-DISCOVERY** is used for the [pqm4](https://github.com/mupq/pqm4
 Flashable .hex files can also be generated for the **Chipwhisperer**.
 
 ### Python
-*Python >= 3.5  needed*
+*Python >= 3.7  needed*
 #### Run
 Run `host/main.py` to try every supported polynomial multiplication on the STM32F407G-DISCOVERY once and gather results & cycle count.
 
