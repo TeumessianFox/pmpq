@@ -24,6 +24,7 @@
 #include "asm_testing.h"
 #include "karatsuba_only.h"
 #include "schoolbook_24x24.h"
+#include "toom_cook_3.h"
 #ifdef CHAIN_SIZE
   #include "polymul_chain.h"
 #endif

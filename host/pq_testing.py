@@ -11,6 +11,7 @@ P, Q, W = 761, 4591, 286
 
 POLYMUL_ALGOS = ["TEXTBOOK", "ASM_SCHOOLBOOK_24", "KARATSUBA_ONLY", "POLYMUL_CHAIN"]
 CHAIN_OPTIONS = {"KARATSUBA": "karatsuba",
+                 "TOOM-COOK-3": "toom_cook_3",
                  "ASM_SCHOOLBOOK_24": "remapped_schoolbook_24x24",
                  "TEXTBOOK": "remapped_textbook"}
 
@@ -34,7 +35,7 @@ def make(algo: str, chain_size=0, chain=None):
         else:
             chain_str = '"{}"'.format(", ".join([CHAIN_OPTIONS[c] for c in chain]))
             makecommand = 'make POLYMUL={} CHAIN_SIZE={} CHAIN={} -C ../m4/'.format(algo, chain_size, chain_str)
-        logging.info(makecommand)
+            logging.info(makecommand)
         build = subprocess.run([makecommand], shell=True, stdout=f, text=True)
         if build.returncode != 0:
             logging.critical(makecommand)
@@ -123,11 +124,16 @@ def test_m4_pq(algo, key_num, text_num):
         for j in range(len(text_num)):
             expected[i + j] += key_num[i] * text_num[j]
 
+    counter = 0
     for i in range(len(output)):
         if output[i] != expected[i]:
             logging.critical("ERROR: Output not correct")
             logging.critical("{}: {} != {}".format(i, output[i], expected[i]))
-            exit(1)
+            #if counter == 10:
+                #exit(1)
+            counter += 1
+    if counter > 0:
+        logging.critical("ERROR: {} values are wrong".format(counter))
     logging.debug("Expected result and M4 result are equal")
     log_to_file(algo, key_num, text_num, output, cycles)
     logging.info("#### Run completed ####")
