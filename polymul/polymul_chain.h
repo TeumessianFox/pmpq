@@ -28,6 +28,14 @@ int remapped_textbook(
     uint16_t *result,
     int depth);
 
+int remapped_textbook_clean(
+    uint16_t *key,
+    int key_length,
+    uint16_t *text,
+    int text_length,
+    uint16_t *result,
+    int depth);
+
 int polymul_chain(
     uint16_t *key,
     int key_length,

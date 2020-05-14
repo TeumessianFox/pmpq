@@ -4,7 +4,7 @@
 /* POLYMUL must be defined as the polynomial multiplication which should be used */
 /* Can be set using "make POLYMUL={algo}" */
 #define TEXTBOOK             1
-#define KARATSUBA            2
+#define TEXTBOOK_CLEAN       2
 #define ASM_SCHOOLBOOK_24    3
 #define ASM_TESTING          4
 #define KARATSUBA_ONLY       5
@@ -30,8 +30,8 @@
 #endif
 #if POLYMUL == TEXTBOOK
   #define polynomial_multiplication(args...) textbook(args)
-#elif POLYMUL == KARATSUBA
-  #define polynomial_multiplication(args...) karatsuba(args)
+#elif POLYMUL == TEXTBOOK_CLEAN
+  #define polynomial_multiplication(args...) textbook_clean(args)
 #elif POLYMUL == ASM_SCHOOLBOOK_24
   #define polynomial_multiplication(key, key_length, text, text_length, result) schoolbook_24x24(result, key, text)
 #elif POLYMUL == ASM_TESTING

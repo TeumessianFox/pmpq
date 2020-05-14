@@ -9,5 +9,12 @@ int textbook(
     int text_length,
     uint16_t *result
     );
+int textbook_clean(
+    uint16_t *key,
+    int key_length,
+    uint16_t *text,
+    int text_length,
+    uint16_t *result
+    );
 
 #endif
