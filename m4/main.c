@@ -92,7 +92,7 @@ int main(void) {
       return 1;
     }
 
-    result_length = key_length + text_length;
+    result_length = key_length + text_length - 1;
 
     uint16_t result[result_length];
     for(int i = 0; i < result_length; i++){
