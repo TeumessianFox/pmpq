@@ -37,6 +37,13 @@ int toom_cook_3(
   uint16_t w2[TWO_THIRD];
   uint16_t w3[TWO_THIRD];
 
+  for(int i = 0; i < TWO_THIRD; i++){
+    w0[i] = 0;
+    w1[i] = 0;
+    w2[i] = 0;
+    w3[i] = 0;
+  }
+
   dprintf("Evaluation phase reached\r\n");
 
   /* Evaluation phase */
