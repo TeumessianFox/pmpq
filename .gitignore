@@ -8,5 +8,5 @@ bin/
 *.log
 *.hex
 *.npy
-__pycache__/
+host/__pycache__/
 generated.*.ld
