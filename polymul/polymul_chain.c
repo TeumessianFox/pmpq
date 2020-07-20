@@ -25,7 +25,7 @@ int remapped_textbook(
     int depth)
 {
   (void)(depth);
-  return textbook(key, key_length, text, text_length, result);
+  return textbook_simple(key, key_length, text, text_length, result);
 }
 
 int remapped_textbook_clean(

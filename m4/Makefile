@@ -18,7 +18,7 @@ POLYMUL_PATH = ../polymul
 include ../polymul/polymul.mk
 SHARED_DIR += $(POLYMUL_PATH)
 SHARED_DIR += $(POLYMUL_SHARED_DIR)
-POLYMUL    ?= TEXTBOOK
+POLYMUL    ?= TEXTBOOK_CLEAN
 CHAIN_SIZE ?= 2
 CHAIN      ?= karatsuba, remapped_textbook
 TGT_CFLAGS += -D POLYMUL=$(POLYMUL)
