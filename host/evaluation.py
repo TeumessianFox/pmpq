@@ -19,7 +19,7 @@ def textbook_eval(num_seeds=1):
     plt.plot(degree, cycles_textbook_simple, color='b')
     plt.title("Simple textbook performance")
     plt.xlabel("Polynomial degree")
-    plt.ylabel("Cycles cycles")
+    plt.ylabel("Clock cycles")
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
     plt.savefig("results/textbook_simple.pdf", bbox_inches='tight')
 
@@ -29,7 +29,7 @@ def textbook_eval(num_seeds=1):
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(6, 8))
     ax1.plot(degree, cycles_textbook_clean,   color='g', label="Simple textbook")
     ax1.plot(degree, cycles_textbook_clean_4, color='r', label="Four calculations per loop")
-    ax1.set_ylabel("Cycles cycles")
+    ax1.set_ylabel("Clock cycles")
     ax1.set_yticks(np.arange(0, max(cycles_textbook_clean)+500000, 500000))
     ax1.legend()
 
