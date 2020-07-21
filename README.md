@@ -1,4 +1,5 @@
-# Polynomial multiplication for post-quantum algorithms
+# Efficient Implementation of Polynomial Multiplication in Post Quantum Cryptography
+
 
 ## Install
  1. ```git clone https://github.com/TeumessianFox/pmpq.git```
