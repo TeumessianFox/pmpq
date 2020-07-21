@@ -22,10 +22,12 @@ int textbook_clean(
     int text_length,
     uint16_t *result)
 {
-  for(int t = 0; t < text_length; t++){
+  result[0] = key[0] * text[0];
+  for(int t = 1; t < text_length; t++){
     result[t] = key[0] * text[t];
     result[(key_length-1) + t] = key[(key_length -1)] * text[t];
   }
+  result[(key_length-1)] += key[(key_length -1)] * text[0];
 
   for(int k = 1; k < key_length-1; k++){
     for(int t = 0; t < text_length; t++){
@@ -45,10 +47,12 @@ int textbook_clean_4(
   if(key_length % 4 != 0)
     return 0x01;
 
-  for(int t = 0; t < text_length; t++){
+  result[0] = key[0] * text[0];
+  for(int t = 1; t < text_length; t++){
     result[t] = key[0] * text[t];
     result[(key_length-1) + t] = key[(key_length -1)] * text[t];
   }
+  result[(key_length-1)] += key[(key_length -1)] * text[0];
 
   for(int k = 1; k < key_length-1; k++){
     for(int t = 0; t < text_length/4; t++){
