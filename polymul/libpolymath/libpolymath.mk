@@ -5,6 +5,6 @@ POLYMATH_SRC += poly_div3.c
 POLYMATH_SRC += poly_div2.c
 POLYMATH_SRC += poly_lshd.c
 
-POLYMATH_ASRC = 
+POLYMATH_ASRC =
 
 POLYMATH_SHARED_DIR = libpolymath

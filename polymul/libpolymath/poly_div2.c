@@ -3,6 +3,10 @@
 void poly_div2(uint16_t *a, int len, uint16_t *b)
 {
   for(int i = 0; i<len; i++){
-    b[i] = a[i] >> 1;
+    uint16_t temp = a[i];
+    b[i] = temp >> 1;
+    if (temp >= (1 << 15))
+      b[i] += 1 << 15;
+    //b[i] = a[i] / 2;
   }
 }
