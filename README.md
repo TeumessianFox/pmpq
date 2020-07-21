@@ -65,7 +65,7 @@ To generate .hex file for cw use in `cw/`
 
 ## Coding style
 
-**C language:** [kernel coding style](https://www.kernel.org/doc/Documentation/process/coding-style.rst)
+**C language:** [coding style](https://www.kernel.org/doc/Documentation/process/coding-style.rst)
 
 **Python:** [PEP8](https://www.python.org/dev/peps/pep-0008/) using [Flake8](https://flake8.pycqa.org/en/latest/)
 
