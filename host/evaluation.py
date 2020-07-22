@@ -9,8 +9,8 @@ def textbook_eval(num_seeds=1):
     plt.close('all')
     seeds = np.random.default_rng().integers(0, 1000, size=num_seeds)
     logging.info("Seeds: {}".format(seeds))
-    keys = list(map(pq_testing.key_gen, seeds))
-    texts = list(map(pq_testing.text_gen, seeds))
+    keys = list(map(pq_testing.key_gen_sntrup4591761, seeds))
+    texts = list(map(pq_testing.text_gen_sntrup4591761, seeds))
     degree = range(12, 512, 4)
 
     cycles_textbook_simple = eval_algo("TEXTBOOK_SIMPLE", seeds, keys, texts, degree)

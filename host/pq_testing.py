@@ -62,7 +62,7 @@ def flash():
         logging.debug(f.read())
 
 
-def key_gen(seed):
+def key_gen_sntrup4591761(seed):
     r = RandomState(seed)
     c_values = 2 * r.randint(2, size=W) - 1  # W "small" non-zero coefficients, i.e. -1, 1
     c_pos = r.choice(P, W, replace=False)  # choose W positions out of the P possible ones
@@ -72,7 +72,7 @@ def key_gen(seed):
     return cs
 
 
-def text_gen(seed):
+def text_gen_sntrup4591761(seed):
     return (np.random.default_rng(seed=seed).integers(0, Q, size=P) // 3) * 3
 
 

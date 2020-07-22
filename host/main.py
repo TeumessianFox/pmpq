@@ -10,12 +10,12 @@ def main():
 def test_algos():
     seed = 168
     logging.info("Seed: {}".format(seed))
-    key_num = pq_testing.key_gen(seed)
-    text_num = pq_testing.text_gen(seed)
+    key_num = pq_testing.key_gen_sntrup4591761(seed)
+    text_num = pq_testing.text_gen_sntrup4591761(seed)
     for algo in pq_testing.POLYMUL_ALGOS:
         if algo == "POLYMUL_CHAIN":
             pq_testing.init(algo, 3, ["TOOM-COOK-3", "TEXTBOOK"])
-            output = pq_testing.test_m4_pq(algo, key_num[0:6], text_num[0:6])
+            pq_testing.test_m4_pq(algo, key_num[0:6], text_num[0:6])
 
 
 if __name__ == "__main__":
