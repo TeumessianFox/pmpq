@@ -1,5 +1,5 @@
 import serial
-from numpy import zeros, uint16
+from numpy import zeros, uint16, uint64
 import logging
 
 BAUDRATE = 115200
@@ -60,6 +60,12 @@ def uint8_to_uint16(recv_uint8):
     for x in range(len(recv_uint8)//2):
         recv_uint16[x] = bytes_to_int16([recv_uint8[2*x], recv_uint8[2*x+1]])[0]
     return recv_uint16
+
+
+def uint16_to_uint64(b: uint16):
+    assert len(b) == 4
+    nums: uint64 = uint64(b[3]*2**48) + uint64(b[2]*2**32) + uint64(b[1]*2**16) + uint64(b[0])
+    return nums
 
 
 def simpleserial_get(c: str):

@@ -1,4 +1,5 @@
 import pq_testing
+from pm_algo import PolymulAlgo
 import logging
 import numpy as np
 import os.path
@@ -11,20 +12,22 @@ def textbook_eval(num_seeds=1):
     logging.info("Seeds: {}".format(seeds))
     keys = list(map(pq_testing.key_gen_sntrup4591761, seeds))
     texts = list(map(pq_testing.text_gen_sntrup4591761, seeds))
-    degree = range(12, 512, 4)
+    degree = range(12, 513, 4)
 
-    cycles_textbook_simple = eval_algo("TEXTBOOK_SIMPLE", seeds, keys, texts, degree)
+    algo_simple = PolymulAlgo("TEXTBOOK_SIMPLE")
+    cycles_textbook_simple = eval_algo(algo_simple, seeds, keys, texts, degree)
 
     plt.figure(1)
     plt.plot(degree, cycles_textbook_simple, color='b')
-    plt.title("Simple textbook performance")
     plt.xlabel("Polynomial degree")
     plt.ylabel("Clock cycles")
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
     plt.savefig("results/textbook_simple.pdf", bbox_inches='tight')
 
-    cycles_textbook_clean = eval_algo("TEXTBOOK_CLEAN", seeds, keys, texts, degree)
-    cycles_textbook_clean_4 = eval_algo("TEXTBOOK_CLEAN_4", seeds, keys, texts, degree)
+    algo_clean = PolymulAlgo("TEXTBOOK_CLEAN")
+    cycles_textbook_clean = eval_algo(algo_clean, seeds, keys, texts, degree)
+    algo_clean_4 = PolymulAlgo("TEXTBOOK_CLEAN_4")
+    cycles_textbook_clean_4 = eval_algo(algo_clean_4, seeds, keys, texts, degree)
 
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(6, 8))
     ax1.plot(degree, cycles_textbook_clean,   color='g', label="Simple textbook")
@@ -41,16 +44,33 @@ def textbook_eval(num_seeds=1):
     fig.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
     fig.savefig("results/textbook_4_comparision.pdf", bbox_inches='tight')
 
+    degree_16 = range(12, 513, 16)
+    algo_static = PolymulAlgo("TEXTBOOK_STATIC", opt='3')
+    cycles_textbook_static = eval_algo(algo_static, seeds, keys, texts, degree_16, rebuild=True)
 
-def eval_algo(algo, seeds, keys, texts, degree):
-    filename = "results/{}.npy".format(algo.lower())
+    plt.figure(3)
+    plt.plot(degree, cycles_textbook_clean,   color='b', label="Simple textbook")
+    plt.plot(degree, cycles_textbook_clean_4, color='r', label="Four calculations per loop")
+    plt.plot(degree_16, cycles_textbook_static, color='g', label="Static textbook")
+    plt.xlabel("Polynomial degree")
+    plt.ylabel("Clock cycles")
+    plt.legend()
+    plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
+    plt.savefig("results/textbook_static.pdf", bbox_inches='tight')
+
+
+def eval_algo(algo: PolymulAlgo, seeds, keys, texts, degree, rebuild=False):
+    filename = "results/{}.npy".format(algo.name.lower())
     if os.path.isfile(filename):
         cycles_textbook = np.load(filename)
         logging.info("Loading {}".format(filename))
     else:
-        pq_testing.init(algo, 0, [])
+        algo.build()
         cycles_textbook = []
         for i in degree:
+            if rebuild:
+                algo.degree = i
+                algo.build()
             logging.info("Degree: {}".format(i))
             output_simple = 0
             for s, seed in enumerate(seeds):

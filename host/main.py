@@ -1,6 +1,7 @@
 import pq_testing
 import logging
 import evaluation
+from pm_algo import PolymulAlgo, POLYMUL_ALGOS
 
 
 def main():
@@ -12,10 +13,11 @@ def test_algos():
     logging.info("Seed: {}".format(seed))
     key_num = pq_testing.key_gen_sntrup4591761(seed)
     text_num = pq_testing.text_gen_sntrup4591761(seed)
-    for algo in pq_testing.POLYMUL_ALGOS:
+    for algo in POLYMUL_ALGOS:
         if algo == "POLYMUL_CHAIN":
-            pq_testing.init(algo, 3, ["TOOM-COOK-3", "TEXTBOOK"])
-            pq_testing.test_m4_pq(algo, key_num[0:6], text_num[0:6])
+            algo_chain = PolymulAlgo(algo, 2, ["TOOM-COOK-3", "TEXTBOOK"])
+            algo_chain.build()
+            pq_testing.test_m4_pq(algo_chain, key_num[0:6], text_num[0:6])
 
 
 if __name__ == "__main__":

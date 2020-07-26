@@ -24,6 +24,9 @@ CHAIN      ?= karatsuba, remapped_textbook
 TGT_CFLAGS += -D POLYMUL=$(POLYMUL)
 TGT_CFLAGS += -D CHAIN_SIZE=$(CHAIN_SIZE)
 TGT_CFLAGS += -D CHAIN="$(CHAIN)"
+ifneq ($(DEGREE),)
+TGT_CFLAGS += -D DEGREE="$(DEGREE)"
+endif
 
 # C files to be compiled
 CFILES += dprintf.c
