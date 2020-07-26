@@ -1,51 +1,49 @@
 #include "karatsuba_only.h"
+#include "dprintf.h"
 
 int recursive_karatsuba(
     uint16_t *key,
     uint16_t *text,
-    int key_length,
+    int degree,
     uint16_t *result);
 
 int recursive_karatsuba(
     uint16_t *key,
     uint16_t *text,
-    int key_length,
+    int degree,
     uint16_t *result)
 {
-  int half_len = key_length;
-  if(half_len == 1){
+  if(degree == 1){
     result[0] = key[0] * text[0];
     return 0x00;
   }
-  if(half_len % 2 != 0)
-    half_len += 1;
-  int result_half = half_len;
-  half_len = half_len / 2;
+  int limb_result_len = degree - 1;
+  int limb_len = degree / 2;
 
-  uint16_t result_mid[result_half];
-  uint16_t result_upper[result_half];
-  uint16_t result_low[result_half];
-  for(int i = 0; i < result_half; i++){
-    result_mid[i] = 0;
-    result_upper[i] = 0;
-    result_low[i] = 0;
+  uint16_t result_mid[limb_result_len];
+  uint16_t result_upper[limb_result_len];
+  uint16_t result_low[limb_result_len];
+  uint16_t key_add[limb_len];
+  uint16_t text_add[limb_len];
+  for(int i = 0; i < limb_len; i++){
+    key_add[i] = key[limb_len + i] + key[i];
+    text_add[i] = text[limb_len + i] + text[i];
   }
 
-  recursive_karatsuba(key, text, half_len, result_low);
-  recursive_karatsuba(key + half_len, text + half_len, half_len, result_upper);
+  recursive_karatsuba(key,            text,            limb_len, result_low);
+  recursive_karatsuba(key + limb_len, text + limb_len, limb_len, result_upper);
+  recursive_karatsuba(key_add,        text_add,        limb_len, result_mid);
 
-  uint16_t key_add[half_len];
-  uint16_t text_add[half_len];
-  for(int i = 0; i < half_len; i++){
-    key_add[i] = key[half_len + i] + key[i];
-    text_add[i] = text[half_len + i] + text[i];
+  for(int i = 0; i < limb_result_len; i++){
+    result[i] = result_low[i];
+    result[limb_result_len + i + 1] = result_upper[i];
   }
-  recursive_karatsuba(key_add, text_add, half_len, result_mid);
 
-  for(int i = 0; i < result_half; i++){
-    result[i] += result_low[i];
-    result[half_len + i] += result_mid[i] - result_upper[i] - result_low[i];
-    result[result_half + i] += result_upper[i];
+  int limb_result_middle = (limb_result_len - 1) / 2;
+  result[limb_result_len] = result_mid[limb_result_middle] - result_upper[limb_result_middle] - result_low[limb_result_middle];
+  for(int i = 0; i < limb_result_middle; i++){
+    result[limb_len + i] += result_mid[i] - result_upper[i] - result_low[i];
+    result[limb_result_len + i + 1] += result_mid[limb_result_middle + i + 1] - result_upper[limb_result_middle + i + 1] - result_low[limb_result_middle + i + 1];
   }
 
   return 0x00;
@@ -62,7 +60,7 @@ int karatsuba_only(
   if(len < text_length)
     len = text_length;
   int size = 1;
-  while(size <= len){
+  while(size < len){
     size = 2 * size;
   }
   recursive_karatsuba(key, text, size, result);

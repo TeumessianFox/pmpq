@@ -6,6 +6,30 @@ import os.path
 import matplotlib.pyplot as plt
 
 
+def karatsuba_eval(num_seeds=1):
+    plt.close('all')
+    seeds = np.random.default_rng().integers(0, 1000, size=num_seeds)
+    logging.info("Seeds: {}".format(seeds))
+    keys = list(map(pq_testing.key_gen_sntrup4591761, seeds))
+    texts = list(map(pq_testing.text_gen_sntrup4591761, seeds))
+    degree_4 = range(12, 513, 4)
+    degree_power_2 = [2 ** j for j in range(1, 9 + 1)]
+
+    algo_clean = PolymulAlgo("TEXTBOOK_CLEAN")
+    cycles_textbook_clean = eval_algo(algo_clean, seeds, keys, texts, degree_4)
+    algo_karatsuba_only = PolymulAlgo("KARATSUBA_ONLY")
+    cycles_karatsuba_only = eval_algo(algo_karatsuba_only, seeds, keys, texts, degree_power_2)
+
+    plt.figure(1)
+    plt.plot(degree_power_2, cycles_karatsuba_only, color='b', label="Karatsuba only")
+    plt.plot(degree_4, cycles_textbook_clean, color='g', label="Simple textbook")
+    plt.xlabel("Polynomial degree")
+    plt.ylabel("Clock cycles")
+    plt.legend()
+    plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
+    plt.savefig("results/karatsuba_only.pdf", bbox_inches='tight')
+
+
 def textbook_eval(num_seeds=1):
     plt.close('all')
     seeds = np.random.default_rng().integers(0, 1000, size=num_seeds)

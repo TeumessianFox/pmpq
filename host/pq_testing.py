@@ -60,9 +60,9 @@ def test_m4_pq(algo: pm_algo, key_num, text_num, log=True):
         #if output[i] % 2 ** 15 != expected[i] % 2 ** 15:
             logging.critical("ERROR: Output not correct")
             logging.critical("{}: {} != {}".format(i, output[i], expected[i]))
-            for num, wi in enumerate([0, 3, 1, 2, 4]):
-                if num * shift <= i <= num * shift + (chunk - 1) and wi != 0 and wi != 4:
-                    logging.critical("Error from W{}[{}] ".format(wi, i - num * shift))
+            #for num, wi in enumerate([0, 3, 1, 2, 4]):
+            #    if num * shift <= i <= num * shift + (chunk - 1) and wi != 0 and wi != 4:
+            #        logging.critical("Error from W{}[{}] ".format(wi, i - num * shift))
             counter += 1
     if counter > 0:
         logging.critical("ERROR: {} values are wrong".format(counter))
