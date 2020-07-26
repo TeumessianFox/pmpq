@@ -24,8 +24,8 @@
  */
 #include "textbook.h"
 #include "karatsuba.h"
-#include "asm_testing.h"
 #include "karatsuba_only.h"
+#include "asm_testing.h"
 #include "schoolbook_24x24.h"
 #include "mult_toom3_6_2.h"
 #include "toom_cook_3.h"

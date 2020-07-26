@@ -35,7 +35,6 @@ int textbook_clean_4(
 /*
  * Fixed key/text length
  */
-#define FIXED_LEN 256
 int textbook_static(
     uint16_t *key,
     int key_length,

@@ -55,16 +55,17 @@ int textbook_clean_4(
   result[(key_length-1)] += key[(key_length -1)] * text[0];
 
   for(int k = 1; k < key_length-1; k++){
-    for(int t = 0; t < text_length/4; t++){
-      result[k+4*t+0] += key[k] * text[4*t+0];
-      result[k+4*t+1] += key[k] * text[4*t+1];
-      result[k+4*t+2] += key[k] * text[4*t+2];
-      result[k+4*t+3] += key[k] * text[4*t+3];
+    for(int t = 0; t < text_length; t=t+4){
+      result[k+t+0] += key[k] * text[t+0];
+      result[k+t+1] += key[k] * text[t+1];
+      result[k+t+2] += key[k] * text[t+2];
+      result[k+t+3] += key[k] * text[t+3];
     }
   }
   return 0x00;
 }
 
+__attribute__((optimize("unroll-loops")))
 int textbook_static(
     uint16_t *key,
     int key_length,
@@ -74,8 +75,8 @@ int textbook_static(
 {
   (void)(key_length);
   (void)(text_length);
-  for(int k = 0; k < FIXED_LEN; k++){
-    for(int t = 0; t < FIXED_LEN; t++){
+  for(int k = 0; k < DEGREE; k++){
+    for(int t = 0; t < DEGREE; t++){
       result[k+t] += key[k] * text[t];
     }
   }
