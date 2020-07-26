@@ -1,5 +1,5 @@
 from numpy.random import RandomState
-from numpy import uint16, zeros, uint64
+from numpy import uint16
 import numpy as np
 import m4serial
 import logging

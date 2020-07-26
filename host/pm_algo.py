@@ -54,7 +54,8 @@ class PolymulAlgo:
         with open("log/make.log", 'r') as f:
             logging.debug(f.read())
 
-    def flash(self):
+    @staticmethod
+    def flash() -> None:
         with open("log/flash.log", 'w') as f:
             build = subprocess.run(["make flash -C ../m4/"], shell=True, stdout=f, stderr=f, text=True)
             if build.returncode != 0:
@@ -69,7 +70,7 @@ class PolymulAlgo:
         dt_string = now.strftime("%d.%m.%Y_%H:%M:%S")
         filename = "log/" + dt_string + "_"
         if self.name == "POLYMUL_CHAIN" and self.chain_size != 0:
-            chain_str = '"{}"'.format("_".join([self.chain]))
+            chain_str = '{}'.format("_".join([link.lower() for link in self.chain]))
             filename += chain_str
         else:
             filename += self.name.lower()

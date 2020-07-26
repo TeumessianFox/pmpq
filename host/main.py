@@ -6,6 +6,7 @@ from pm_algo import PolymulAlgo, POLYMUL_ALGOS
 
 def main():
     evaluation.textbook_eval()
+    #test_algos()
 
 
 def test_algos():
@@ -15,9 +16,9 @@ def test_algos():
     text_num = pq_testing.text_gen_sntrup4591761(seed)
     for algo in POLYMUL_ALGOS:
         if algo == "POLYMUL_CHAIN":
-            algo_chain = PolymulAlgo(algo, 2, ["TOOM-COOK-3", "TEXTBOOK"])
+            algo_chain = PolymulAlgo(algo, 2, ["KARATSUBA", "TEXTBOOK"])
             algo_chain.build()
-            pq_testing.test_m4_pq(algo_chain, key_num[0:6], text_num[0:6])
+            pq_testing.test_m4_pq(algo_chain, key_num, text_num)
 
 
 if __name__ == "__main__":
