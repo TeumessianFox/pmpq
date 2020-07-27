@@ -5,7 +5,7 @@ from pm_algo import PolymulAlgo, POLYMUL_ALGOS
 
 
 def main():
-    # evaluation.textbook_eval()
+    evaluation.textbook_eval()
     evaluation.karatsuba_eval()
     # test_algos()
 

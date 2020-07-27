@@ -13,6 +13,7 @@ int karatsuba(
   int degree = key_length;
   if(degree % 2 == 1){
     // TODO: What todo for degrees which are not a power of 2?
+    degree += 1;
   }
   int limb_result_len = degree - 1;
   int limb_len = degree / 2;

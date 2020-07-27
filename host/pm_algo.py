@@ -21,14 +21,14 @@ OPT_OPTIONS = {'0', '1', '2', '3', 's'}
 
 class PolymulAlgo:
     def __init__(self, name: str, chain_size=0, chain=None, degree=0, opt='s'):
-        if not name in POLYMUL_ALGOS:
+        if name not in POLYMUL_ALGOS:
             logging.critical("{} not in list of available polymul algos".format(name))
             exit(1)
         self.name = name
         self.chain_size = chain_size
         self.chain = chain
         self.degree = degree
-        if not opt in OPT_OPTIONS:
+        if opt not in OPT_OPTIONS:
             logging.critical("-O{} not a possible optimization option".format(opt))
             exit(1)
         self.opt = "-O" + opt
