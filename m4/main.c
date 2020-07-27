@@ -113,7 +113,10 @@ int main(void) {
     simpleserial_put('z', 1, (uint8_t *) &status);
 
     simpleserial_get();
-    while(reset_m4 != 1){}
+    while(reset_m4 != 1){
+      dprintf("Reset not received first try!\r\n");
+      simpleserial_get();
+    }
     reset_m4 = 0;
   }
 

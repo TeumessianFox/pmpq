@@ -23,6 +23,10 @@ def text_gen_sntrup4591761(seed):
     return (np.random.default_rng(seed=seed).integers(0, Q, size=P) // 3) * 3
 
 
+def random_gen(seed, degree=1024, max_coefficient=Q) -> ([], []):
+    return np.split(np.random.default_rng(seed=seed).integers(0, max_coefficient, size=2*degree), 2)
+
+
 def test_m4_pq(algo: pm_algo, key_num, text_num, log=True):
     m4serial.init()
     m4serial.simpleserial_put('k', key_num)
@@ -46,6 +50,11 @@ def test_m4_pq(algo: pm_algo, key_num, text_num, log=True):
     logging.info("Cycles: " + str(cycles))
     output8 = m4serial.simpleserial_get('r')
     output = m4serial.uint8_to_uint16(output8)
+    if result[0] == 0:
+        logging.debug("M4 received reset ack")
+    else:
+        logging.critical("M4 Error when receiving reset ack")
+        exit(1)
 
     expected = np.zeros(shape=len(key_num) + len(text_num) - 1, dtype=uint16)
     for i in range(len(key_num)):
@@ -70,7 +79,13 @@ def test_m4_pq(algo: pm_algo, key_num, text_num, log=True):
         algo.log_to_file(key_num, text_num, output, cycles)
     assert counter == 0
     logging.debug("Expected result and M4 result are equal")
+    m4serial.simpleserial_put('x', np.zeros(shape=2, dtype=uint16))
+    result = m4serial.simpleserial_get('z')
+    if result[0] == 0:
+        logging.debug("M4 received reset ack")
+    else:
+        logging.critical("M4 Error when receiving reset ack")
+        exit(1)
     logging.info("#### Run completed ####")
-    m4serial.simpleserial_put('x', expected)
     m4serial.end()
     return [output, cycles]
