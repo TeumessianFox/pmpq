@@ -25,18 +25,6 @@ int remapped_textbook(
     int depth)
 {
   (void)(depth);
-  return textbook_simple(key, key_length, text, text_length, result);
-}
-
-int remapped_textbook_clean(
-    uint16_t *key,
-    int key_length,
-    uint16_t *text,
-    int text_length,
-    uint16_t *result,
-    int depth)
-{
-  (void)(depth);
   return textbook_clean(key, key_length, text, text_length, result);
 }
 
