@@ -52,16 +52,12 @@ int toom_cook_3(
   poly_add(t0, t2, lower_len, result);
 
   /* w2 = w0-k1 = k2-k1+k0 */
-  //for(int i = 0; i < lower_len; i++)
-    //dprintf("w0[%i] = %i and k1[%i] = %i\r\n", i, w0[i], i, k1[i]);
   poly_sub(w0, k1, lower_len, w2);
 
   /* w0 = w0+k1 = k2+k1+k0 */
   poly_add(w0, k1, lower_len, w0);
 
   /* w1 = w4-t1 = t2-t1+t0 */
-  //for(int i = 0; i < lower_len; i++)
-    //dprintf("w4[%i] = %i and t1[%i] = %i\r\n", i, result[i], i, t1[i]);
   poly_sub(result, t1, lower_len, w1);
 
   /* w4 = w4+t1 = t2+t1+t0 */
@@ -109,42 +105,19 @@ int toom_cook_3(
   int len = (lower_len<<1)-1;
 
   /* w2 = (w2-w3)/3  -> [5 3 1 1 0] */
-  //for(int i = 0; i < len; i++)
-    //dprintf("w2[%i] = %i and w3[%i] = %i\r\n", i, w2[i], i, w3[i]);
   poly_sub(w2, w3, len, w2);
-  //for(int i = 0; i < len; i++)
-    //dprintf("Before w2[%i] = %i\r\n", i, w2[i]);
   poly_div3(w2, len, w2);
-  //for(int i = 0; i < len; i++)
-    //dprintf("After w2[%i] = %i\r\n", i, w2[i]);
 
   /* w3 = (w1-w3)/2  -> [0 1 0 1 0] */
-  //for(int i = 0; i < len; i++)
-    //dprintf("w1[%i] = %i and w3[%i] = %i\r\n", i, w1[i], i, w3[i]);
   poly_sub(w1, w3, len, w3);
-  //for(int i = 0; i < len; i++)
-    //dprintf("Before w3[%i] = %i\r\n", i, w3[i]);
   poly_div2(w3, len, w3);
-  //for(int i = 0; i < len; i++)
-    //dprintf("After w3[%i] = %i\r\n", i, w3[i]);
 
   /* w1 = w1-w0  -> [1 1 1 1 0] */
   poly_sub(w1, w0, len, w1);
 
   /* w2 = (w2-w1)/2 - w4*2 */
-  //for(int i = 0; i < len; i++)
-    //dprintf("w2[%i] = %i and w1[%i] = %i\r\n", i, w2[i], i, w1[i]);
   poly_sub(w2, w1, len, w2);
-  //for(int i = 0; i < len; i++)
-    //dprintf("Before w2[%i] = %i\r\n", i, w2[i]);
   poly_div2(w2, len, w2);
-  //for(int i = 0; i < len; i++)
-    //dprintf("After w2[%i] = %i\r\n", i, w2[i]);
-  //for(int i = 0; i < len; i++)
-    //dprintf("After w4[%i] = %i\r\n", i, result[i]);
-  //w2[0] += 32768;
-  //w2[1] += 32768;
-  //w2[2] += 32768;
   poly_sub(w2, result, len, w2);
   poly_sub(w2, result, len, w2);
 
