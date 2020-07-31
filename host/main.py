@@ -7,6 +7,7 @@ from pm_algo import PolymulAlgo, POLYMUL_ALGOS
 def main():
     evaluation.textbook_eval()
     evaluation.karatsuba_eval()
+    evaluation.toom_3_eval()
     # test_algos()
 
 
@@ -19,7 +20,7 @@ def test_algos():
         if algo == "POLYMUL_CHAIN":
             algo_chain = PolymulAlgo(algo, 2, ["KARATSUBA", "TEXTBOOK"])
             algo_chain.build()
-            pq_testing.test_m4_pq(algo_chain, key_num, text_num)
+            algo_chain.run_polymul(algo_chain, key_num, text_num)
 
 
 if __name__ == "__main__":

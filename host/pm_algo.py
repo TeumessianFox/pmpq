@@ -1,8 +1,9 @@
 import subprocess
-import logging
 from datetime import datetime
 import numpy as np
-
+from numpy import uint16
+import m4serial
+import logging
 
 POLYMUL_ALGOS = ["TEXTBOOK_SIMPLE",
                  "TEXTBOOK_CLEAN",
@@ -92,3 +93,73 @@ class PolymulAlgo:
             f.write("\n\n")
             f.write("Cycles:\n")
             f.write(str(cycles))
+
+    def run_polymul(self, key, text, log=True):
+        m4serial.init()
+
+        # Send key and wait for ACK
+        m4serial.simpleserial_put('k', key)
+        ack = m4serial.simpleserial_get('z')
+        if ack[0] == 0:
+            logging.debug("M4 received key")
+        else:
+            logging.critical("M4 Error when receiving the key")
+            exit(1)
+
+        # Send plain text and wait for ACK
+        m4serial.simpleserial_put('p', text)
+        ack = m4serial.simpleserial_get('z')
+        if ack[0] == 0:
+            logging.debug("M4 received plain text")
+        else:
+            logging.critical("M4 Error when receiving the plain text")
+            exit(1)
+
+        # Gather clock cycle count
+        cycles_uint8 = m4serial.simpleserial_get('c')
+        cycles_uint16 = m4serial.uint8_to_uint16(cycles_uint8)
+        cycles = m4serial.uint16_to_uint64(cycles_uint16)
+        logging.info("Cycles: " + str(cycles))
+
+        # Receive result
+        output8 = m4serial.simpleserial_get('r')
+        output = m4serial.uint8_to_uint16(output8)
+
+        # Calculate expected result using slow textbook polymul and compare it to the received output
+        expected = np.zeros(shape=len(key) + len(text) - 1, dtype=uint16)
+        for i in range(len(key)):
+            for j in range(len(text)):
+                expected[i + j] += key[i] * text[j]
+        counter = 0
+        for i in range(len(output)):
+            if self.name == "POLYMUL_CHAIN" and "TOOM-COOK-3" in self.chain:
+                if output[i] % 2 ** 15 != expected[i] % 2 ** 15:
+                    logging.critical("ERROR: Output not correct")
+                    logging.critical("{}: {} != {}".format(i, output[i], expected[i]))
+                    counter += 1
+            elif output[i] != expected[i]:
+                logging.critical("ERROR: Output not correct")
+                logging.critical("{}: {} != {}".format(i, output[i], expected[i]))
+                counter += 1
+        try:
+            assert counter == 0
+        except AssertionError as err:
+            logging.critical("ERROR: {} values are wrong".format(counter))
+            raise err
+
+        if log:
+            self.log_to_file(key, text, output, cycles)
+        logging.debug("Expected result and M4 result are equal")
+
+        # Send reset signal
+        m4serial.simpleserial_put('x', np.zeros(shape=2, dtype=uint16))
+        result = m4serial.simpleserial_get('z')
+        if result[0] == 0:
+            logging.debug("M4 received reset ack")
+        else:
+            logging.critical("M4 Error when receiving reset ack")
+            exit(1)
+
+        logging.info("#### Run successful ####")
+        m4serial.end()
+        return [output, cycles]
