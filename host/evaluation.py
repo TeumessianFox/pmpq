@@ -17,12 +17,15 @@ def toom_3_eval(num_seeds=1):
 
     algo_clean = PolymulAlgo("TEXTBOOK_CLEAN")
     cycles_textbook_clean = eval_algo(algo_clean, seeds, keys, texts, degree_4)
+    algo_karatsuba_textbook = PolymulAlgo("POLYMUL_CHAIN", 2, ["KARATSUBA", "TEXTBOOK"])
+    cycles_karatsuba_textbook = eval_algo(algo_karatsuba_textbook, seeds, keys, texts, degree_4)
     algo_toom_3_textbook = PolymulAlgo("POLYMUL_CHAIN", 2, ["TOOM-COOK-3", "TEXTBOOK"])
     cycles_toom_3_textbook = eval_algo(algo_toom_3_textbook, seeds, keys, texts, degree_6)
 
     plt.figure(1)
-    plt.plot(degree_6, cycles_toom_3_textbook, color='b', label="Toom-Cook-3, textbook")
     plt.plot(degree_4, cycles_textbook_clean, color='g', label="Simple textbook")
+    plt.plot(degree_4, cycles_karatsuba_textbook, color='r', label="Karatsuba, Textbook")
+    plt.plot(degree_6, cycles_toom_3_textbook, color='b', label="Toom-Cook-3, textbook")
     plt.xlabel("Polynomial degree")
     plt.ylabel("Clock cycles")
     plt.legend()
