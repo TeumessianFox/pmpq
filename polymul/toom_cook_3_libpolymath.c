@@ -4,7 +4,6 @@
 
 #define ONE_THIRD   (MAX_SS_LEN + 2)/3
 #define TWO_THIRD   ((MAX_SS_LEN + 2)*2)/3
-#define INVERSE_3 43691
 
 /* Based on:
  * Marco BODRATO, "Towards Optimal Toom-Cook Multiplication for
@@ -13,7 +12,7 @@
  * Springer, Madrid, Spain, June 2007, pp. 116-133.
  * http://bodrato.it/papers/#Toom-Cook
  */
-int toom_cook_3(
+int toom_cook_3_libpolymath(
     uint16_t *key,
     int key_length,
     uint16_t *text,
@@ -38,21 +37,23 @@ int toom_cook_3(
   uint16_t w3[TWO_THIRD];
 
   /* Evaluation phase */
-  for (int i = 0; i < lower_len; i++){
-    /* w0 = k0+k2 */
-    w0[i] = k0[i] + k2[i];
-    /* w2 = w0-k1 = k2-k1+k0 */
-    w2[i] = w0[i] - k1[i];
-    /* w0 = w0+k1 = k2+k1+k0 */
-    w0[i] = w0[i] + k1[i];
+  /* w0 = k0+k2 */
+  poly_add(k0, k2, lower_len, w0);
 
-    /* w4 = t0+t2 */
-    result[i] = t0[i] + t2[i];
-    /* w1 = w4-t1 = t2-t1+t0 */
-    w1[i] = result[i] - t1[i];
-    /* w4 = w4+t1 = t2+t1+t0 */
-    result[i] = result[i] + t1[i];
-  }
+  /* w4 = t0+t2 */
+  poly_add(t0, t2, lower_len, result);
+
+  /* w2 = w0-k1 = k2-k1+k0 */
+  poly_sub(w0, k1, lower_len, w2);
+
+  /* w0 = w0+k1 = k2+k1+k0 */
+  poly_add(w0, k1, lower_len, w0);
+
+  /* w1 = w4-t1 = t2-t1+t0 */
+  poly_sub(result, t1, lower_len, w1);
+
+  /* w4 = w4+t1 = t2+t1+t0 */
+  poly_add(result, t1, lower_len, result);
 
   /* w3 = w2*w1 */
   (*chain[depth+1])(w2, lower_len, w1, lower_len, w3, depth+1);
@@ -60,17 +61,15 @@ int toom_cook_3(
   /* w1 = w0*w4 */
   (*chain[depth+1])(w0, lower_len, result, lower_len, w1, depth+1);
 
-  for (int i = 0; i < lower_len; i++){
-    /* w0 = (w0+k2)*2 -k0 = 4k2+2k1+k0 */
-    w0[i] = w0[i] + k2[i];
-    w0[i] = w0[i] << 1;
-    w0[i] = w0[i] - k0[i];
+  /* w0 = (w0+k2)*2 -k0 = 4k2+2k1+k0 */
+  poly_add(w0, k2, lower_len, w0);
+  poly_mul2(w0, lower_len, w0);
+  poly_sub(w0, k0, lower_len, w0);
 
-    /* w4 = (w4+t2)*2 -t0 = 4t2+2t1+t0 */
-    result[i] = result[i] + t2[i];
-    result[i] = result[i] << 1;
-    result[i] = result[i] - t0[i];
-  }
+  /* w4 = (w4+t2)*2 -t0 = 4t2+2t1+t0 */
+  poly_add(result, t2, lower_len, result);
+  poly_mul2(result, lower_len, result);
+  poly_sub(result, t0, lower_len, result);
 
   /* w2 = w0*w4 */
   (*chain[depth+1])(w0, lower_len, result, lower_len, w2, depth+1);
@@ -98,31 +97,28 @@ int toom_cook_3(
   int len = (lower_len<<1)-1;
 
   /* w2 = (w2-w3)/3  -> [5 3 1 1 0] */
-  // TODO: Why is the clock cycle count so bad when inlined???
   poly_sub(w2, w3, len, w2);
   poly_div3(w2, len, w2);
 
-  for (int i = 0; i < len; i++){
-    /* w3 = (w1-w3)/2  -> [0 1 0 1 0] */
-    w3[i] = w1[i] - w3[i];
-    w3[i] = w3[i] >> 1;
+  /* w3 = (w1-w3)/2  -> [0 1 0 1 0] */
+  poly_sub(w1, w3, len, w3);
+  poly_div2(w3, len, w3);
 
-    /* w1 = w1-w0  -> [1 1 1 1 0] */
-    w1[i] = w1[i] - w0[i];
+  /* w1 = w1-w0  -> [1 1 1 1 0] */
+  poly_sub(w1, w0, len, w1);
 
-    /* w2 = (w2-w1)/2 - w4*2 */
-    w2[i] = w2[i] - w1[i];
-    w2[i] = w2[i] >> 1;
-    w2[i] = w2[i] - result[i];
-    w2[i] = w2[i] - result[i];
+  /* w2 = (w2-w1)/2 - w4*2 */
+  poly_sub(w2, w1, len, w2);
+  poly_div2(w2, len, w2);
+  poly_sub(w2, result, len, w2);
+  poly_sub(w2, result, len, w2);
 
-    /* w1 = w1-w3-w4 */
-    w1[i] = w1[i] - w3[i];
-    w1[i] = w1[i] - result[i];
+  /* w1 = w1-w3-w4 */
+  poly_sub(w1, w3, len, w1);
+  poly_sub(w1, result, len, w1);
 
-    /* w3 = w3-w2 */
-    w3[i] = w3[i] - w2[i];
-  }
+  /* w3 = w3-w2 */
+  poly_sub(w3, w2, len, w3);
 
   /* at this point shift W[n] by B*n */
   poly_lshd(result, key_length+text_length, lower_len);
@@ -135,11 +131,4 @@ int toom_cook_3(
   poly_add(w0, result, len, result);
 
   return 0x00;
-
-  for (int i = 0; i < len; i++){
-    /* w2 = (w2-w3)/3  -> [5 3 1 1 0] */
-    w2[i] = w2[i] - w3[i];
-    w2[i] = (uint16_t)(w2[i] * INVERSE_3);
-  }
 }
-

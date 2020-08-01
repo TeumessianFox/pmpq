@@ -11,7 +11,6 @@
 #define ASM_TESTING             6
 #define KARATSUBA_ONLY          7
 #define POLYMUL_CHAIN           8
-#define POLYMUL_ASM_TOOM3_6_2   9
 
 /* Only needs to be changed if a new polymul should be added to the list of
  * options. To add a new one follow the TEXTBOOK example
@@ -27,8 +26,8 @@
 #include "karatsuba_only.h"
 #include "asm_testing.h"
 #include "schoolbook_24x24.h"
-#include "mult_toom3_6_2.h"
 #include "toom_cook_3.h"
+#include "toom_cook_3_libpolymath.h"
 #ifdef CHAIN_SIZE
   #include "polymul_chain.h"
 #endif
@@ -48,8 +47,6 @@
   #define polynomial_multiplication(args...) karatsuba_only(args)
 #elif POLYMUL == POLYMUL_CHAIN
   #define polynomial_multiplication(args...) polymul_chain(args)
-#elif POLYMUL == POLYMUL_ASM_TOOM3_6_2
-  #define polynomial_multiplication(key, key_length, text, text_length, result) polymul_asm_toom3_6_2(result, key, text)
 #endif
 
 #endif
