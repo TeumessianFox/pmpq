@@ -40,9 +40,9 @@ Access `pm_algo.POLYMUL_ALGOS` to gather all viable **algo_names**
 PolymulAlgo class
 | Function | Parameter | Description |
 | --- | --- | --- |
-| `init(...)` | self, name: *str*, chain_size: *int*, chain: *str array*, degree: *int*, opt: *char* | Flashing **algo** code to the M4 and setting up serial communication |
+| `init(...)` | self, name: *str*, chain_size: *int*, chain: *str array*, degree: *int*, opt: *char* | Flashing **PolymulAlgo** code to the M4 and setting up serial communication |
 | `build(...)` | self | Make and flashing **PolymulAlgo** code to the M4 |
-| `log_to_file(...)` | self, key_num, text_num, result, cycles | Log results to file |
+| `log_to_file(...)` | self, key, text, result, cycles | Log results to file |
 | `run_polymul(...)` | self, key, text, log: *boolean* | Run specific **PolymulAlgo** for specific testset |
 
 ### Makefile
