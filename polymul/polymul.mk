@@ -7,7 +7,6 @@ POLYMUL_SRC += toom_cook_3.c
 POLYMUL_SRC += toom_cook_3_libpolymath.c
 
 POLYMUL_ASRC  = schoolbook_24x24.S
-POLYMUL_ASRC += mult_toom3_6_2.S
 POLYMUL_ASRC += asm_testing.S
 POLYMUL_ASRC += $(POLYMATH_ASRC)
 

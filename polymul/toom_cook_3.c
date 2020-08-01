@@ -1,4 +1,3 @@
-#include "polymath.h"
 #include "config.h"
 #include "common_config.h"
 
@@ -97,12 +96,11 @@ int toom_cook_3(
 
   int len = (lower_len<<1)-1;
 
-  /* w2 = (w2-w3)/3  -> [5 3 1 1 0] */
-  // TODO: Why is the clock cycle count so bad when inlined???
-  poly_sub(w2, w3, len, w2);
-  poly_div3(w2, len, w2);
-
   for (int i = 0; i < len; i++){
+    /* w2 = (w2-w3)/3  -> [5 3 1 1 0] */
+    w2[i] = w2[i] - w3[i];
+    w2[i] = (uint16_t)(w2[i] * INVERSE_3);
+
     /* w3 = (w1-w3)/2  -> [0 1 0 1 0] */
     w3[i] = w1[i] - w3[i];
     w3[i] = w3[i] >> 1;
@@ -125,21 +123,23 @@ int toom_cook_3(
   }
 
   /* at this point shift W[n] by B*n */
-  poly_lshd(result, key_length+text_length, lower_len);
-  poly_add(w2, result, len, result);
-  poly_lshd(result, key_length+text_length, lower_len);
-  poly_add(w1, result, len, result);
-  poly_lshd(result, key_length+text_length, lower_len);
-  poly_add(w3, result, len, result);
-  poly_lshd(result, key_length+text_length, lower_len);
-  poly_add(w0, result, len, result);
+  int total_len = key_length + text_length - 1 - len;
+  for (int i = len - 1; i >= 0; i--){
+    result[total_len + i] = result[i];
+    result[i] = w0[i];
+  }
+  total_len = total_len - 2 * lower_len;
+  for (int i = len - 1; i >= 0; i--){
+    result[total_len + i] = w1[i];
+  }
+  int total_len_2 = total_len - lower_len;
+  total_len += lower_len;
+  for (int i = len - 1; i >= 0; i--){
+    result[total_len + i] += w2[i];
+  }
+  for (int i = len - 1; i >= 0; i--){
+    result[total_len_2 + i] += w3[i];
+  }
 
   return 0x00;
-
-  for (int i = 0; i < len; i++){
-    /* w2 = (w2-w3)/3  -> [5 3 1 1 0] */
-    w2[i] = w2[i] - w3[i];
-    w2[i] = (uint16_t)(w2[i] * INVERSE_3);
-  }
 }
-
