@@ -5,22 +5,10 @@ from pm_algo import PolymulAlgo, POLYMUL_ALGOS
 
 
 def main():
+    evaluation.schoolbook_eval()
+    evaluation.toom_3_eval()
     evaluation.textbook_eval()
     evaluation.karatsuba_eval()
-    evaluation.toom_3_eval()
-    # test_algos()
-
-
-def test_algos():
-    seed = 168
-    logging.info("Seed: {}".format(seed))
-    key_num = pq_testing.key_gen_sntrup4591761(seed)
-    text_num = pq_testing.text_gen_sntrup4591761(seed)
-    for algo in POLYMUL_ALGOS:
-        if algo == "POLYMUL_CHAIN":
-            algo_chain = PolymulAlgo(algo, 2, ["KARATSUBA", "TEXTBOOK"])
-            algo_chain.build()
-            algo_chain.run_polymul(algo_chain, key_num, text_num)
 
 
 if __name__ == "__main__":

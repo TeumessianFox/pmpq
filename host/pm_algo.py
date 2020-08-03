@@ -10,11 +10,15 @@ POLYMUL_ALGOS = ["TEXTBOOK_SIMPLE",
                  "TEXTBOOK_CLEAN_4",
                  "TEXTBOOK_STATIC",
                  "KARATSUBA_ONLY",
+                 "ASM_SCHOOLBOOK_12",
+                 "ASM_SCHOOLBOOK_16",
                  "ASM_SCHOOLBOOK_24",
                  "POLYMUL_CHAIN"]
 CHAIN_OPTIONS = {"KARATSUBA": "karatsuba",
                  "TOOM-COOK-3": "toom_cook_3",
                  "TOOM-COOK-3_LIBPOLYMATH": "toom_cook_3_libpolymath",
+                 "ASM_SCHOOLBOOK_12": "remapped_schoolbook_12x12",
+                 "ASM_SCHOOLBOOK_16": "remapped_schoolbook_16x16",
                  "ASM_SCHOOLBOOK_24": "remapped_schoolbook_24x24",
                  "TEXTBOOK": "remapped_textbook"}
 OPT_OPTIONS = {'0', '1', '2', '3', 's'}
@@ -132,11 +136,12 @@ class PolymulAlgo:
                 expected[i + j] += key[i] * text[j]
         counter = 0
         for i in range(len(output)):
-            if self.name == "POLYMUL_CHAIN" and "TOOM-COOK-3" in self.chain or "TOOM-COOK-3_LIBPOLYMATH" in self.chain:
-                if output[i] % 2 ** 15 != expected[i] % 2 ** 15:
-                    logging.critical("ERROR: Output not correct")
-                    logging.critical("{}: {} != {}".format(i, output[i], expected[i]))
-                    counter += 1
+            if self.name == "POLYMUL_CHAIN":
+                if "TOOM-COOK-3" in self.chain or "TOOM-COOK-3_LIBPOLYMATH" in self.chain:
+                    if output[i] % 2 ** 15 != expected[i] % 2 ** 15:
+                        logging.critical("ERROR: Output not correct")
+                        logging.critical("{}: {} != {}".format(i, output[i], expected[i]))
+                        counter += 1
             elif output[i] != expected[i]:
                 logging.critical("ERROR: Output not correct")
                 logging.critical("{}: {} != {}".format(i, output[i], expected[i]))

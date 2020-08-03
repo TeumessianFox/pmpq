@@ -6,6 +6,52 @@ import os.path
 import matplotlib.pyplot as plt
 
 
+def schoolbook_eval():
+    seed = 168
+    logging.info("Seed: {}".format(seed))
+    key, text = pq_testing.random_gen(seed, degree=24)
+    filename = "results/np_save/schoolbook.npy"
+    if os.path.isfile(filename):
+        cycles = np.load(filename)
+        logging.info("Loading {}".format(filename))
+    else:
+        algo_schoolbook_24 = PolymulAlgo("ASM_SCHOOLBOOK_24")
+        algo_schoolbook_24.build()
+        cycles_schoolbook_24 = algo_schoolbook_24.run_polymul(key, text, log=False)[1]
+
+        algo_schoolbook_16 = PolymulAlgo("ASM_SCHOOLBOOK_16")
+        algo_schoolbook_16.build()
+        cycles_schoolbook_16 = algo_schoolbook_16.run_polymul(key[0:16], text[0:16], log=False)[1]
+
+        algo_schoolbook_12 = PolymulAlgo("ASM_SCHOOLBOOK_12")
+        algo_schoolbook_12.build()
+        cycles_schoolbook_12 = algo_schoolbook_12.run_polymul(key[0:12], text[0:12], log=False)[1]
+
+        algo_clean = PolymulAlgo("TEXTBOOK_CLEAN")
+        algo_clean.build()
+        cycles_textbook_clean_12 = algo_clean.run_polymul(key[0:12], text[0:12], log=False)[1]
+        cycles_textbook_clean_16 = algo_clean.run_polymul(key[0:16], text[0:16], log=False)[1]
+        cycles_textbook_clean_24 = algo_clean.run_polymul(key[0:24], text[0:24], log=False)[1]
+
+        cycles = np.array([[cycles_schoolbook_12, cycles_schoolbook_16, cycles_schoolbook_24],
+                        [cycles_textbook_clean_12, cycles_textbook_clean_16, cycles_textbook_clean_24]])
+        np.save(filename, cycles)
+    workload = np.array([12*12, 16*16, 24*24])
+    latency = cycles/workload
+
+    logging.info("Textbook 24x24: {} (Latency: {:.2f})".format(cycles[1][2], latency[1][2]))
+    logging.info("Schoolbook 24x24: {} (Latency: {:.2f})".format(cycles[0][2], latency[0][2]))
+    logging.info("Difference: {} (Speedup: {:.2f}x)".format(cycles[1][2] - cycles[0][2], cycles[1][2] / cycles[0][2]))
+
+    logging.info("Textbook 16x16: {} (Latency: {:.2f})".format(cycles[1][1], latency[1][1]))
+    logging.info("Schoolbook 16x16: {} (Latency: {:.2f})".format(cycles[0][1], latency[0][1]))
+    logging.info("Difference: {} (Speedup: {:.2f}x)".format(cycles[1][1] - cycles[0][1], cycles[1][1] / cycles[0][1]))
+
+    logging.info("Textbook 12x12: {} (Latency: {:.2f})".format(cycles[1][0], latency[1][0]))
+    logging.info("Schoolbook 12x12: {} (Latency: {:.2f})".format(cycles[0][0], latency[0][0]))
+    logging.info("Difference: {} (Speedup: {:.2f}x)".format(cycles[1][0] - cycles[0][0], cycles[1][0] / cycles[0][0]))
+
+
 def toom_3_eval(num_seeds=1):
     plt.close('all')
     seeds = np.random.default_rng().integers(0, 1000, size=num_seeds)
