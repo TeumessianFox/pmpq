@@ -34,19 +34,21 @@ Flashable .hex files can also be generated for the **Chipwhisperer**.
 #### Run
 Run `host/main.py` to try every supported polynomial multiplication on the STM32F407G-DISCOVERY once and gather results & cycle count.
 
-#### pq_testing
-Access `pq_testing.POLYMUL_ALGOS` to gather viable **algo**
+#### pm_algo
+Access `pm_algo.POLYMUL_ALGOS` to gather all viable **algo_names**
+
+PolymulAlgo class
 | Function | Parameter | Description |
 | --- | --- | --- |
-| `init(...)` | algo: *str* | Flashing **algo** code to the M4 and setting up serial communication |
-| `key_gen(...)` | seed: *int* | Key generation for Streamlined NTRU Prime (sntrup4591761) |
-| `text_gen(...)` | seed: *int* | Text generation for Streamlined NTRU Prime (sntrup4591761) |
-| `test_m4_pq(...)` | algo: *str*, key: *int array*, text: *int array* | Run specific **algo** for specific parameter |
+| `init(...)` | self, name: *str*, chain_size: *int*, chain: *str array*, degree: *int*, opt: *char* | Flashing **PolymulAlgo** code to the M4 and setting up serial communication |
+| `build(...)` | self | Make and flashing **PolymulAlgo** code to the M4 |
+| `log_to_file(...)` | self, key, text, result, cycles | Log results to file |
+| `run_polymul(...)` | self, key, text, log: *boolean* | Run specific **PolymulAlgo** for specific testset |
 
 ### Makefile
 
 #### STM32F407G-DISCOVERY
-*Recommended*: Use python `pq_testing.init()` to make & flash
+*Recommended*: Use python `PolymulAlgo.build()` to make & flash
 
 For manual use in `m4/`
 | Command | Description |
