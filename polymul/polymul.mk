@@ -6,7 +6,9 @@ POLYMUL_SRC += polymul_chain.c
 POLYMUL_SRC += toom_cook_3.c
 POLYMUL_SRC += toom_cook_3_libpolymath.c
 
-POLYMUL_ASRC  = schoolbook_24x24.S
+POLYMUL_ASRC  = schoolbook_12x12.S
+POLYMUL_ASRC += schoolbook_16x16.S
+POLYMUL_ASRC += schoolbook_24x24.S
 POLYMUL_ASRC += asm_testing.S
 POLYMUL_ASRC += $(POLYMATH_ASRC)
 

@@ -2,6 +2,34 @@
 
 const algo chain[CHAIN_SIZE] = {CHAIN};
 
+int remapped_schoolbook_12x12(
+    uint16_t *key,
+    int key_length,
+    uint16_t *text,
+    int text_length,
+    uint16_t *result,
+    int depth)
+{
+  (void)(key_length);
+  (void)(text_length);
+  (void)(depth);
+  return schoolbook_12x12(result, key, text);
+}
+
+int remapped_schoolbook_16x16(
+    uint16_t *key,
+    int key_length,
+    uint16_t *text,
+    int text_length,
+    uint16_t *result,
+    int depth)
+{
+  (void)(key_length);
+  (void)(text_length);
+  (void)(depth);
+  return schoolbook_16x16(result, key, text);
+}
+
 int remapped_schoolbook_24x24(
     uint16_t *key,
     int key_length,
