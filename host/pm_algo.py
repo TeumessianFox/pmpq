@@ -37,6 +37,9 @@ class PolymulAlgo:
             logging.critical("-O{} not a possible optimization option".format(opt))
             exit(1)
         self.opt = "-O" + opt
+        if self.name == "POLYMUL_CHAIN":
+            self.toom3count = self.chain.count("TOOM-COOK-3") + self.chain.count("TOOM-COOK-3_LIBPOLYMATH")
+            logging.info("Polymul chain includes {} Toom-Cook-3. All results are only {} bits precise".format(self.toom3count, 16 - self.toom3count))
 
     def build(self):
         logging.info("#### Running {} ####".format(self.name))
@@ -137,11 +140,10 @@ class PolymulAlgo:
         counter = 0
         for i in range(len(output)):
             if self.name == "POLYMUL_CHAIN":
-                if "TOOM-COOK-3" in self.chain or "TOOM-COOK-3_LIBPOLYMATH" in self.chain:
-                    if output[i] % 2 ** 15 != expected[i] % 2 ** 15:
-                        logging.critical("ERROR: Output not correct")
-                        logging.critical("{}: {} != {}".format(i, output[i], expected[i]))
-                        counter += 1
+                if output[i] % 2 ** (16 - self.toom3count) != expected[i] % 2 ** (16 - self.toom3count):
+                    logging.critical("ERROR: Output not correct")
+                    logging.critical("{}: {} != {}".format(i, output[i], expected[i]))
+                    counter += 1
             elif output[i] != expected[i]:
                 logging.critical("ERROR: Output not correct")
                 logging.critical("{}: {} != {}".format(i, output[i], expected[i]))
