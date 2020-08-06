@@ -1,5 +1,6 @@
 import numpy as np
 import os.path
+import logging
 
 MIN_LEN = 64
 MAX_LEN = 1024
@@ -13,7 +14,7 @@ def create_sequences():
     filename = "base/sequences.npy"
     if os.path.isfile(filename):
         sequences = np.load(filename)
-        print("Loading {}".format(filename))
+        logging.info("Loading {}".format(filename))
     else:
         sequences = []
         last_layer = [[1, 0, 0, 0, 0, 0, 0, 0]]
@@ -38,7 +39,7 @@ def create_schoolbook_sequences(schoolbooks, sequences):
     filename = "base/schoolbook_sequences.npy"
     if os.path.isfile(filename):
         sseq = np.load(filename)
-        print("Loading {}".format(filename))
+        logging.info("Loading {}".format(filename))
     else:
         sseq = np.zeros((len(schoolbooks), len(sequences), SEQ_LEN), dtype=int)
         for sb, schoolbook in enumerate(schoolbooks):
@@ -67,7 +68,7 @@ def sequences_to_polymul_chains(schoolbook_names, sequences):
     filename = "base/schoolbook_chains.npy"
     if os.path.isfile(filename):
         schoolbooks_chains = np.load(filename, allow_pickle=True)
-        print("Loading {}".format(filename))
+        logging.info("Loading {}".format(filename))
     else:
         schoolbooks_chains = []
         for schoolbook in schoolbook_names:
@@ -83,20 +84,19 @@ def sequences_to_polymul_chains(schoolbook_names, sequences):
                         layer_chain.append("TOOM-COOK-3")
                     else:
                         break
+                layer_chain = layer_chain[::-1]
                 schoolbook_chains.append(layer_chain)
             schoolbooks_chains.append(schoolbook_chains)
         np.save(filename, schoolbooks_chains, allow_pickle=True)
     return schoolbooks_chains
 
 
-def main():
+def polymul_chains():
     sequences = create_sequences()
     schoolbook_sequences = create_schoolbook_sequences(SCHOOLBOOKS, sequences)
     sorted_set = create_sorted_set(schoolbook_sequences)
     schoolbooks_chains = sequences_to_polymul_chains(SCHOOLBOOK_NAMES, sequences)
-    print(sorted_set)
-    print(schoolbooks_chains)
-
-
-if __name__ == "__main__":
-    main()
+    logging.debug(sorted_set)
+    logging.debug(schoolbooks_chains)
+    logging.debug(schoolbook_sequences)
+    return schoolbook_sequences, schoolbooks_chains
