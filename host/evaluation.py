@@ -20,9 +20,44 @@ class Evaluation:
         self.karatsuba_eval()
         self.toom_3_eval()
         self.schoolbook_eval()
-        self.evaluate_polymul_chain()
+        self.evaluate_textbook_polymul_chain()
+        self.evaluate_schoolbook_polymul_chain()
 
-    def evaluate_polymul_chain(self):
+    def evaluate_textbook_polymul_chain(self):
+        plt.close('all')
+
+        degree_4 = range(12, 1025, 4)
+        degree_6 = range(12, 1025, 6)
+        degree_9 = range(18, 1025, 9)
+        degree_12 = range(24, 1025, 12)
+        algo_clean = PolymulAlgo("TEXTBOOK_CLEAN")
+        cycles_textbook_clean = self.eval_algo(algo_clean, degree_4)
+        algo_karatsuba_textbook = PolymulAlgo("POLYMUL_CHAIN", 2, ["KARATSUBA", "TEXTBOOK"])
+        cycles_karatsuba_textbook = self.eval_algo(algo_karatsuba_textbook, degree_4)
+        algo_karatsuba_karatsuba_textbook = PolymulAlgo("POLYMUL_CHAIN", 3, ["KARATSUBA", "KARATSUBA", "TEXTBOOK"])
+        cycles_karatsuba_karatsuba_textbook = self.eval_algo(algo_karatsuba_karatsuba_textbook, degree_4)
+        algo_toom_3_textbook = PolymulAlgo("POLYMUL_CHAIN", 2, ["TOOM-COOK-3", "TEXTBOOK"])
+        cycles_toom_3_textbook = self.eval_algo(algo_toom_3_textbook, degree_6)
+        algo_toom_3_toom_3_textbook = PolymulAlgo("POLYMUL_CHAIN", 3, ["TOOM-COOK-3", "TOOM-COOK-3", "TEXTBOOK"])
+        cycles_toom_3_toom_3_textbook = self.eval_algo(algo_toom_3_toom_3_textbook, degree_9)
+        algo_toom_3_karatsuba_karatsuba_textbook = PolymulAlgo("POLYMUL_CHAIN", 4, ["TOOM-COOK-3", "KARATSUBA", "KARATSUBA", "TEXTBOOK"])
+        cycles_toom_3_karatsuba_karatsuba_textbook = self.eval_algo(algo_toom_3_karatsuba_karatsuba_textbook, degree_12)
+
+        plt.figure()
+        plt.plot(degree_4, cycles_textbook_clean, color='g', label="Simple textbook")
+        plt.plot(degree_4, cycles_karatsuba_textbook, color='r', label="Karatsuba, textbook")
+        plt.plot(degree_4, cycles_karatsuba_karatsuba_textbook, color='m', label="Karatsuba, Karatsuba, textbook")
+        plt.plot(degree_6, cycles_toom_3_textbook, color='b', label="Toom-Cook-3, textbook")
+        plt.plot(degree_9, cycles_toom_3_toom_3_textbook, color='y', label="Toom-Cook-3, Toom-Cook-3, textbook")
+        plt.plot(degree_12, cycles_toom_3_karatsuba_karatsuba_textbook, color='c', label="Toom-Cook-3, Karatsuba, Karatsuba, textbook")
+        plt.xlabel("Polynomial degree")
+        plt.ylabel("Clock cycles")
+        plt.legend()
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
+        plt.savefig("results/textbook_chains.pdf", bbox_inches='tight')
+
+    def evaluate_schoolbook_polymul_chain(self):
         plt.close('all')
         schoolbook_sequences, all_schoolbooks_chains = pm_root.polymul_chains()
 
