@@ -132,14 +132,16 @@ int toom_cook_3(
   for (int i = len - 1; i >= 0; i--){
     result[total_len + i] = w1[i];
   }
+
   int total_len_2 = total_len - lower_len;
   total_len += lower_len;
   for (int i = len - 1; i >= 0; i--){
     result[total_len + i] += w2[i];
-  }
-  for (int i = len - 1; i >= 0; i--){
     result[total_len_2 + i] += w3[i];
   }
+  len = (len - 1) / 2;
+  result[total_len + len] = w2[len];
+  result[total_len_2 + len] = w3[len];
 
   return 0x00;
 }
