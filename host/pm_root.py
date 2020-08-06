@@ -4,7 +4,7 @@ import logging
 
 MIN_LEN = 64
 MAX_LEN = 1024
-SEQ_LEN = 8
+SEQ_LEN = 5
 SCHOOLBOOKS = [12, 16, 24]
 SCHOOLBOOK_NAMES = ["ASM_SCHOOLBOOK_12", "ASM_SCHOOLBOOK_16", "ASM_SCHOOLBOOK_24"]
 
@@ -17,7 +17,7 @@ def create_sequences():
         logging.info("Loading {}".format(filename))
     else:
         sequences = []
-        last_layer = [[1, 0, 0, 0, 0, 0, 0, 0]]
+        last_layer = [[1, 0, 0, 0, 0]]
         for seq in range(0, SEQ_LEN - 1):
             current_layer = []
             for layer in last_layer:
@@ -71,21 +71,26 @@ def sequences_to_polymul_chains(schoolbook_names, sequences):
         logging.info("Loading {}".format(filename))
     else:
         schoolbooks_chains = []
-        for schoolbook in schoolbook_names:
+        for s, schoolbook in enumerate(schoolbook_names):
             schoolbook_chains = []
             for seq in sequences:
                 layer_chain = []
+                degree = 0
                 for element in seq:
                     if element == 1:
                         layer_chain.append(schoolbook)
+                        degree = SCHOOLBOOKS[s]
                     elif element == 2:
                         layer_chain.append("KARATSUBA")
+                        degree *= 2
                     elif element == 3:
                         layer_chain.append("TOOM-COOK-3")
+                        degree *= 3
                     else:
                         break
-                layer_chain = layer_chain[::-1]
-                schoolbook_chains.append(layer_chain)
+                if degree < 1024:
+                    layer_chain = layer_chain[::-1]
+                    schoolbook_chains.append(layer_chain)
             schoolbooks_chains.append(schoolbook_chains)
         np.save(filename, schoolbooks_chains, allow_pickle=True)
     return schoolbooks_chains
