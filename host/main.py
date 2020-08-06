@@ -1,14 +1,10 @@
-import pq_testing
 import logging
-import evaluation
-from pm_algo import PolymulAlgo, POLYMUL_ALGOS
+from evaluation import Evaluation
 
 
 def main():
-    evaluation.schoolbook_eval()
-    evaluation.toom_3_eval()
-    evaluation.textbook_eval()
-    evaluation.karatsuba_eval()
+    eval = Evaluation()
+    eval.evaluate_all()
 
 
 if __name__ == "__main__":
