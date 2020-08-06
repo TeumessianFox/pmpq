@@ -31,6 +31,8 @@ class PolymulAlgo:
             exit(1)
         self.name = name
         self.chain_size = chain_size
+        if self.chain_size > 5:
+            logging.critical("Chain sizes greater than 5 might lead to errors due to recursion stack size")
         self.chain = chain
         self.degree = degree
         if opt not in OPT_OPTIONS:
@@ -39,7 +41,6 @@ class PolymulAlgo:
         self.opt = "-O" + opt
         if self.name == "POLYMUL_CHAIN":
             self.toom3count = self.chain.count("TOOM-COOK-3") + self.chain.count("TOOM-COOK-3_LIBPOLYMATH")
-            logging.info("Polymul chain includes {} Toom-Cook-3. All results are only {} bits precise".format(self.toom3count, 16 - self.toom3count))
 
     def build(self):
         logging.info("#### Running {} ####".format(self.name))
@@ -138,6 +139,9 @@ class PolymulAlgo:
             for j in range(len(text)):
                 expected[i + j] += key[i] * text[j]
         counter = 0
+        if self.toom3count > 0:
+            logging.info("Polymul chain includes {} Toom-Cook-3. All results are only {} bits precise"
+                         .format(self.toom3count, 16 - self.toom3count))
         for i in range(len(output)):
             if self.name == "POLYMUL_CHAIN":
                 if output[i] % 2 ** (16 - self.toom3count) != expected[i] % 2 ** (16 - self.toom3count):
