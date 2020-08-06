@@ -1,15 +1,26 @@
-import pq_testing
+import generate
 from pm_algo import PolymulAlgo
 import logging
 import numpy as np
 import os.path
 import matplotlib.pyplot as plt
+import pm_root
+
+
+def evaluate_polymul_chain(num_seeds=1):
+    plt.close('all')
+    seeds = np.random.default_rng().integers(0, 1000, size=num_seeds)
+    logging.info("Seeds: {}".format(seeds))
+    random_key_text = list(map(generate.random_gen, seeds))
+    keys, texts = [r[0] for r in random_key_text], [r[1] for r in random_key_text]
+
+
 
 
 def schoolbook_eval():
     seed = 168
     logging.info("Seed: {}".format(seed))
-    key, text = pq_testing.random_gen(seed, degree=24)
+    key, text = generate.random_gen(seed, degree=24)
     filename = "results/np_save/schoolbook.npy"
     if os.path.isfile(filename):
         cycles = np.load(filename)
@@ -56,7 +67,7 @@ def toom_3_eval(num_seeds=1):
     plt.close('all')
     seeds = np.random.default_rng().integers(0, 1000, size=num_seeds)
     logging.info("Seeds: {}".format(seeds))
-    random_key_text = list(map(pq_testing.random_gen, seeds))
+    random_key_text = list(map(generate.random_gen, seeds))
     keys, texts = [r[0] for r in random_key_text], [r[1] for r in random_key_text]
     degree_6 = range(12, 1025, 6)
     degree_4 = range(12, 1025, 4)
@@ -99,7 +110,7 @@ def karatsuba_eval(num_seeds=1):
     plt.close('all')
     seeds = np.random.default_rng().integers(0, 1000, size=num_seeds)
     logging.info("Seeds: {}".format(seeds))
-    random_key_text = list(map(pq_testing.random_gen, seeds))
+    random_key_text = list(map(generate.random_gen, seeds))
     keys, texts = [r[0] for r in random_key_text], [r[1] for r in random_key_text]
     degree_4 = range(12, 1025, 4)
     degree_power_2 = [2 ** j for j in range(3, 10 + 1)]
@@ -138,7 +149,7 @@ def textbook_eval(num_seeds=1):
     plt.close('all')
     seeds = np.random.default_rng().integers(0, 1000, size=num_seeds)
     logging.info("Seeds: {}".format(seeds))
-    random_key_text = list(map(pq_testing.random_gen, seeds))
+    random_key_text = list(map(generate.random_gen, seeds))
     keys, texts = [r[0] for r in random_key_text], [r[1] for r in random_key_text]
     degree = range(12, 1025, 4)
     degree_16 = range(12, 1025, 16)
