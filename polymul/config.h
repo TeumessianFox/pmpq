@@ -13,6 +13,7 @@
 #define ASM_TESTING             8
 #define KARATSUBA_ONLY          9
 #define POLYMUL_CHAIN          10
+#define NTT                    11
 
 /* Only needs to be changed if a new polymul should be added to the list of
  * options. To add a new one follow the TEXTBOOK example
@@ -32,6 +33,7 @@
 #include "schoolbook_24x24.h"
 #include "toom_cook_3.h"
 #include "toom_cook_3_libpolymath.h"
+#include "ntt.h"
 #ifdef CHAIN_SIZE
   #include "polymul_chain.h"
 #endif
@@ -55,6 +57,8 @@
   #define polynomial_multiplication(args...) karatsuba_only(args)
 #elif POLYMUL == POLYMUL_CHAIN
   #define polynomial_multiplication(args...) polymul_chain(args)
+#elif POLYMUL == NTT
+  #define polynomial_multiplication(args...) ntt(args)
 #endif
 
 #endif

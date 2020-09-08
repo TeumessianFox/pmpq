@@ -13,7 +13,8 @@ POLYMUL_ALGOS = ["TEXTBOOK_SIMPLE",
                  "ASM_SCHOOLBOOK_12",
                  "ASM_SCHOOLBOOK_16",
                  "ASM_SCHOOLBOOK_24",
-                 "POLYMUL_CHAIN"]
+                 "POLYMUL_CHAIN",
+                 "NTT"]
 CHAIN_OPTIONS = {"KARATSUBA": "karatsuba",
                  "TOOM-COOK-3": "toom_cook_3",
                  "TOOM-COOK-3_LIBPOLYMATH": "toom_cook_3_libpolymath",
@@ -139,7 +140,7 @@ class PolymulAlgo:
             for j in range(len(text)):
                 expected[i + j] += key[i] * text[j]
         counter = 0
-        if self.toom3count > 0:
+        if self.name == "POLYMUL_CHAIN" and self.toom3count > 0:
             logging.info("Polymul chain includes {} Toom-Cook-3. All results are only {} bits precise"
                          .format(self.toom3count, 16 - self.toom3count))
         for i in range(len(output)):
