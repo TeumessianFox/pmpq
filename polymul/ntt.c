@@ -3,14 +3,14 @@
 #include "textbook.h"
 
 /*  Kyber 512  */
-#define PRIME_Q   7681
+#define PRIME_Q         7681
 #define DEGREE_KYBER    256
-#define EXP       8     // DEGREE_KYBER = 2^EXP
+#define EXP             8     // DEGREE_KYBER = 2^EXP
 
 #define int_t       int16_t
 #define uint_t      uint16_t
 #define int_dt      int32_t
-#define unint_dt    uint32_t
+#define uint_dt     uint32_t
 #define WORDLENGTH  16
 
 uint_t reverse(uint_t v);
@@ -21,9 +21,17 @@ void precompute_roots_ntt(uint_t *roots, uint_t *iroots);
 inline uint_t modmul(int_t a, int_t b);
 void forward_ntt(int_t *x, uint_t *roots);
 void inverse_ntt(int_t *x,int_t inv,int_t invpr,uint_t *iroots);
+void component_multiplication(uint_t *a, uint_t *b, uint_t *c);
 
 // Uncomment for montgomery method
-// #define MONTGOMERY
+//#define MONTGOMERY
+
+#ifdef MONTGOMERY
+#define R (1 << WORDLENGTH)
+#define ND invers(R-PRIME_Q, R)        //TODO 1/(R-q) mod R
+#define ONE (R % PRIME_Q)
+#define R2MODP 5569                    // ((R * R) % PRIME_Q)
+#endif
 
 /* Mongomery START */
 #ifdef MONTGOMERY
@@ -305,10 +313,18 @@ void inverse_ntt(
     /* convert back from Montgomery to "normal" form */
     x[j]=redc(x[j]);
     x[j]-=q;
-    x[j]+=(x[j]>>(WL-1))&q;
+    x[j]+=(x[j]>>(WORDLENGTH-1))&q;
 #else
     x[j] = modmul(x[j], inv);
 #endif
+  }
+}
+
+/* component-wise multiplication */
+void component_multiplication(uint_t *a, uint_t *b, uint_t *c)
+{
+  for (int i = 0; i < DEGREE_KYBER; i++){
+    c[i] = a[i] * b[i];
   }
 }
 
@@ -334,15 +350,16 @@ int ntt(
 
 #ifdef MONTGOMERY
   int_t inv = nres(invers(DEGREE_KYBER,q));
-  int_t invpr = modmul(iroots[1],inv);
+  int_t invpr = modmul(inv_roots[1],inv);
   inv -= q;
-  inv += (inv>>(WL-1))&q;
+  inv += (inv>>(WORDLENGTH-1))&q;
   invpr -= q;
-  invpr += (invpr>>(WL-1))&q;
+  invpr += (invpr>>(WORDLENGTH-1))&q;
 #else
   int_t inv = invers(DEGREE_KYBER,q);
   int_t invpr = modmul(inv_roots[1],inv);
 #endif
+  dprintf("ND = %i\r\n", ND);
 
   dprintf("Inverse are precomputed\r\n");
 
