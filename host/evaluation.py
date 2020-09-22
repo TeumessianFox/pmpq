@@ -63,6 +63,7 @@ class Evaluation:
 
         all_cycle_list = []
         all_degree_list = []
+        all_pairs_list = []
         for schoolbook_num, schoolbook_chains in enumerate(all_schoolbooks_chains):
             schoolbook_cycles_list = []
             schoolbook_degree_list = []
@@ -72,12 +73,17 @@ class Evaluation:
                 cycles_algo = self.eval_algo(algo, dir="polymul_chain/", degree=[degree])[0]
                 schoolbook_cycles_list.append(cycles_algo)
                 schoolbook_degree_list.append(degree)
+                all_pairs_list.append([degree, cycles_algo])
             all_cycle_list.append(schoolbook_cycles_list)
             all_degree_list.append(schoolbook_degree_list)
 
         degree_4 = range(12, 1025, 4)
         algo_clean = PolymulAlgo("TEXTBOOK_CLEAN")
         cycles_textbook_clean = self.eval_algo(algo_clean, degree_4)
+        degree_12 = range(24, 1025, 12)
+        algo_toom_3_karatsuba_karatsuba_textbook = PolymulAlgo("POLYMUL_CHAIN", 4,
+                                                               ["TOOM-COOK-3", "KARATSUBA", "KARATSUBA", "TEXTBOOK"])
+        cycles_toom_3_karatsuba_karatsuba_textbook = self.eval_algo(algo_toom_3_karatsuba_karatsuba_textbook, degree_12)
 
         plt.figure(1)
         for i, schoolbook in enumerate(pm_root.SCHOOLBOOKS):
@@ -92,6 +98,8 @@ class Evaluation:
 
         plt.figure(2)
         plt.plot(degree_4, cycles_textbook_clean, color='r', label="Simple textbook")
+        plt.plot(degree_12, cycles_toom_3_karatsuba_karatsuba_textbook, color='c',
+                 label="Toom-Cook-3, Karatsuba, Karatsuba, textbook")
         for i, schoolbook in enumerate(pm_root.SCHOOLBOOKS):
             plt.plot(all_degree_list[i], all_cycle_list[i], marker='x', ls='',
                      label="Schoolbook {}x{}".format(schoolbook, schoolbook))
@@ -113,6 +121,14 @@ class Evaluation:
 
             plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
             plt.savefig("results/schoolbook_chains_{}.pdf".format(schoolbook), bbox_inches='tight')
+
+        for pair in all_pairs_list:
+            for other_pair in all_pairs_list:
+                if pair[0] == other_pair[0]:
+                    if pair[1] > other_pair[1]:
+                        all_pairs_list.remove(other_pair)
+        all_pairs_list.sort(key=lambda x: x[0])
+        #print(all_pairs_list)
 
     def schoolbook_eval(self):
         plt.close('all')

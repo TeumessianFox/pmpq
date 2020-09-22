@@ -28,7 +28,7 @@ void component_multiplication(uint_t *a, uint_t *b, uint_t *c);
 
 #ifdef MONTGOMERY
 #define R (1 << WORDLENGTH)
-#define ND invers(R-PRIME_Q, R)        //TODO 1/(R-q) mod R
+#define ND 1        //TODO 1/(R-q) mod R
 #define ONE (R % PRIME_Q)
 #define R2MODP 5569                    // ((R * R) % PRIME_Q)
 #endif
@@ -359,8 +359,6 @@ int ntt(
   int_t inv = invers(DEGREE_KYBER,q);
   int_t invpr = modmul(inv_roots[1],inv);
 #endif
-  dprintf("ND = %i\r\n", ND);
-
   dprintf("Inverse are precomputed\r\n");
 
   uint16_t ntt_key[1024];

@@ -4,9 +4,9 @@ import ntt_test
 
 
 def main():
-    #eval = Evaluation()
-    #eval.evaluate_all()
-    ntt_test.test()
+    eval = Evaluation()
+    eval.evaluate_all()
+    #ntt_test.test()
 
 
 if __name__ == "__main__":
