@@ -5,7 +5,7 @@ from pm_algo import PolymulAlgo
 import logging
 
 # Kyber 512
-Q = 7681
+Q = 3329
 DEGREE = 256
 
 
@@ -13,7 +13,7 @@ def key_gen_kyber512(seed):
     """
     (https://pq-crystals.org/kyber/data/kyber-specification.pdf)
     Kyber is a learning-with-errors problem in module lattice
-    Kyber512 with n= 256, k=2, q=7681 and eta(aka. n) = 5
+    Kyber512 with n= 256, k=2, q=3329 and eta(aka. n) = 5
     Kyber uses NTT instead of Karatsuba or Toom-Cook due to it's ring modulo
     Kyber uses polynomial multiplication to multiply matrix A with vector s
     Matrix A is of size kxk where each element is a 32 byte vector in R_q

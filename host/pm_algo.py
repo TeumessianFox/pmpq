@@ -4,6 +4,8 @@ import numpy as np
 from numpy import uint16
 import m4serial
 import logging
+#from polymod import Poly
+#import ntt_test
 
 POLYMUL_ALGOS = ["TEXTBOOK_SIMPLE",
                  "TEXTBOOK_CLEAN",
@@ -140,6 +142,11 @@ class PolymulAlgo:
             for j in range(len(text)):
                 expected[i + j] += key[i] * text[j]
         counter = 0
+        # if self.name == "NTT":
+        #     coefficients = (Poly(expected, N=ntt_test.Q) % Poly([1] + [0] * (ntt_test.DEGREE - 2) + [1], N=ntt_test.Q)).coeffs
+        #     expected = [int(i) for i in coefficients]
+        #     print("Lengths of expected result: {}".format(len(expected)))
+
         if self.name == "POLYMUL_CHAIN" and self.toom3count > 0:
             logging.info("Polymul chain includes {} Toom-Cook-3. All results are only {} bits precise"
                          .format(self.toom3count, 16 - self.toom3count))

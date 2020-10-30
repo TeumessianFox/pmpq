@@ -5,7 +5,7 @@ POLYMUL_SRC += karatsuba_only.c
 POLYMUL_SRC += polymul_chain.c
 POLYMUL_SRC += toom_cook_3.c
 POLYMUL_SRC += toom_cook_3_libpolymath.c
-POLYMUL_SRC += ntt.c
+POLYMUL_SRC += ntt_kyber.c
 
 POLYMUL_ASRC  = schoolbook_12x12.S
 POLYMUL_ASRC += schoolbook_16x16.S

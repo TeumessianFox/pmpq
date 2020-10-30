@@ -1,6 +1,6 @@
 import logging
 from evaluation import Evaluation
-import ntt_test
+#import ntt_test
 
 
 def main():

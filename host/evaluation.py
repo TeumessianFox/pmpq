@@ -53,7 +53,7 @@ class Evaluation:
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
         plt.legend()
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/textbook_chains.pdf", bbox_inches='tight')
 
@@ -92,7 +92,7 @@ class Evaluation:
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
         plt.legend()
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/schoolbooks_chains.pdf", bbox_inches='tight')
 
@@ -102,11 +102,11 @@ class Evaluation:
                  label="Toom-Cook-3, Karatsuba, Karatsuba, textbook")
         for i, schoolbook in enumerate(pm_root.SCHOOLBOOKS):
             plt.plot(all_degree_list[i], all_cycle_list[i], marker='x', ls='',
-                     label="Schoolbook {}x{}".format(schoolbook, schoolbook))
+                     label="Chains ending on Schoolbook {}x{}".format(schoolbook, schoolbook))
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
         plt.legend()
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/schoolbook_chain_vs_textbook.pdf", bbox_inches='tight')
 
@@ -116,7 +116,7 @@ class Evaluation:
                      label="Schoolbook {}x{}".format(schoolbook, schoolbook))
             plt.xlabel("Polynomial degree")
             plt.ylabel("Clock cycles")
-            plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+            plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
             plt.legend()
 
             plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
@@ -194,7 +194,7 @@ class Evaluation:
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
         plt.legend()
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/toom_3_libpolymath.pdf", bbox_inches='tight')
 
@@ -212,7 +212,7 @@ class Evaluation:
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
         plt.legend()
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/toom_3.pdf", bbox_inches='tight')
 
@@ -232,7 +232,7 @@ class Evaluation:
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
         plt.legend()
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/karatsuba_only.pdf", bbox_inches='tight')
 
@@ -246,7 +246,7 @@ class Evaluation:
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
         plt.legend()
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/karatsuba_textbook.pdf", bbox_inches='tight')
 
@@ -259,10 +259,10 @@ class Evaluation:
         cycles_textbook_simple = self.eval_algo(algo_simple, degree)
 
         plt.figure(1)
-        plt.plot(degree, cycles_textbook_simple, color='b')
+        plt.plot(degree, cycles_textbook_simple, color='g')
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/textbook_simple.pdf", bbox_inches='tight')
 
@@ -277,7 +277,7 @@ class Evaluation:
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
         plt.legend()
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/textbook_4_comparision.pdf", bbox_inches='tight')
 
@@ -291,7 +291,7 @@ class Evaluation:
         plt.xlabel("Polynomial degree")
         plt.ylabel("Clock cycles")
         plt.legend()
-        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6))
+        plt.ticklabel_format(axis='y', style='sci', scilimits=(6, 6), useMathText=True)
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0)
         plt.savefig("results/textbook_static.pdf", bbox_inches='tight')
 

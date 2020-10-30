@@ -324,7 +324,7 @@ void inverse_ntt(
 void component_multiplication(uint_t *a, uint_t *b, uint_t *c)
 {
   for (int i = 0; i < DEGREE_KYBER; i++){
-    c[i] = a[i] * b[i];
+    c[i] = (a[i] * b[i]) % PRIME_Q;
   }
 }
 
@@ -361,49 +361,19 @@ int ntt(
 #endif
   dprintf("Inverse are precomputed\r\n");
 
-  uint16_t ntt_key[1024];
-  for (int i = 0; i < 1024; i++){
-    ntt_key[i] = key[i];
-  }
 
   dprintf("NTT start\r\n");
-  forward_ntt((int_t *) ntt_key, roots);
+  forward_ntt((int_t *) key, roots);
   dprintf("NTT end\r\n");
-  int differ = 0;
-  for (int i = 0; i < DEGREE_KYBER + 2; i++){
-    if(ntt_key[i] != key[i])
-      differ++;
-  }
-  if (differ > 0){
-    dprintf("key != NTT(key)\r\n");
-  }else{
-    dprintf("Error key == NTT(key)\r\n");
-  }
+  dprintf("NTT start\r\n");
+  forward_ntt((int_t *) text, roots);
+  dprintf("NTT end\r\n");
+
+  component_multiplication(key, text, result);
+
   dprintf("INTT start\r\n");
-  inverse_ntt((int_t *) ntt_key, inv, invpr, inv_roots);
+  inverse_ntt((int_t *) result, inv, invpr, inv_roots);
   dprintf("INTT end\r\n");
-
-  /*
-  for (int i = 0; i < DEGREE_KYBER; i++){
-    result[i] = ntt_key[i];
-  }
-  */
-
-  differ = 0;
-  for (int i = 0; i < DEGREE_KYBER + 2; i++){
-    if(ntt_key[i] != key[i])
-      differ++;
-  }
-  if (differ > 0){
-    dprintf("Error: key != INTT(NTT(key))\r\n");
-    dprintf("Failure\r\n");
-    return 0x03;
-  }else{
-    dprintf("key == INTT(NTT(key))\r\n");
-    dprintf("Success\r\n");
-  }
-
-  textbook_clean(key, key_length, text, text_length, result);
 
   return 0x00;
 }

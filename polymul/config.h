@@ -33,7 +33,7 @@
 #include "schoolbook_24x24.h"
 #include "toom_cook_3.h"
 #include "toom_cook_3_libpolymath.h"
-#include "ntt.h"
+#include "ntt_kyber.h"
 #ifdef CHAIN_SIZE
   #include "polymul_chain.h"
 #endif
@@ -58,7 +58,7 @@
 #elif POLYMUL == POLYMUL_CHAIN
   #define polynomial_multiplication(args...) polymul_chain(args)
 #elif POLYMUL == NTT
-  #define polynomial_multiplication(args...) ntt(args)
+  #define polynomial_multiplication(args...) ntt_kyber(args)
 #endif
 
 #endif
